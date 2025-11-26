@@ -137,7 +137,7 @@ export default function StudentDashboard() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, {data.student.name}! 👋</h1>
+              <h1 className="text-3xl font-bold mb-2">Welcome back, {data.student.name}!</h1>
               <p className="text-blue-100 text-lg">Ready to achieve your sports goals today?</p>
             </div>
             <div className="hidden lg:block">
@@ -202,7 +202,7 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Recent Events Section */}
           <div className="lg:col-span-2">
-            <Card className="h-full">
+            <Card className="h-full shadow-lg">
               <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="h-5 w-5" />
@@ -212,66 +212,78 @@ export default function StudentDashboard() {
                   Latest sports activities and accomplishments
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+              <CardContent className="p-6 flex-1">
+                <div className="space-y-4 h-full">
                   {/* Sample recent events since we don't have them in API yet */}
-                  <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-200 hover:shadow-md transition-shadow">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                        <Trophy className="h-5 w-5 text-white" />
+                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                        <Trophy className="h-6 w-6 text-white" />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-green-900">Inter-Department Cricket Championship</h4>
-                      <p className="text-sm text-green-700 mt-1">
-                        Computer Science won by 3 wickets in a thrilling finish!
+                      <h4 className="font-semibold text-green-900 text-lg">Inter-Department Cricket Championship</h4>
+                      <p className="text-sm text-green-700 mt-2 leading-relaxed">
+                        Computer Science won by 3 wickets in a thrilling finish! An amazing display of teamwork and skill.
                       </p>
-                      <p className="text-xs text-green-600 mt-2">January 15, 2025</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <p className="text-xs text-green-600 font-medium">January 15, 2025</p>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Championship</Badge>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg border border-blue-200 hover:shadow-md transition-shadow">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                        <Star className="h-5 w-5 text-white" />
+                      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Star className="h-6 w-6 text-white" />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-blue-900">Basketball Friendly Match Victory</h4>
-                      <p className="text-sm text-blue-700 mt-1">
-                        NUML Basketball Club defeated Punjab University 78-72
+                      <h4 className="font-semibold text-blue-900 text-lg">Basketball Friendly Match Victory</h4>
+                      <p className="text-sm text-blue-700 mt-2 leading-relaxed">
+                        NUML Basketball Club defeated Punjab University 78-72 in an intense and exciting match.
                       </p>
-                      <p className="text-xs text-blue-600 mt-2">January 10, 2025</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <p className="text-xs text-blue-600 font-medium">January 10, 2025</p>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Victory</Badge>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg border border-purple-200 hover:shadow-md transition-shadow">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
-                        <Activity className="h-5 w-5 text-white" />
+                      <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                        <Activity className="h-6 w-6 text-white" />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-purple-900">Annual Sports Day 2024</h4>
-                      <p className="text-sm text-purple-700 mt-1">
-                        Grand celebration with 500+ participants across multiple sports
+                      <h4 className="font-semibold text-purple-900 text-lg">Annual Sports Day 2024</h4>
+                      <p className="text-sm text-purple-700 mt-2 leading-relaxed">
+                        Grand celebration with 500+ participants across multiple sports disciplines and events.
                       </p>
-                      <p className="text-xs text-purple-600 mt-2">December 20, 2024</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <p className="text-xs text-purple-600 font-medium">December 20, 2024</p>
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Event</Badge>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="flex items-start space-x-4 p-4 bg-orange-50 rounded-lg border border-orange-200 hover:shadow-md transition-shadow">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-                        <Target className="h-5 w-5 text-white" />
+                      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                        <Target className="h-6 w-6 text-white" />
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-orange-900">Table Tennis Tournament Success</h4>
-                      <p className="text-sm text-orange-700 mt-1">
-                        NUML secured 2nd position in inter-university tournament
+                      <h4 className="font-semibold text-orange-900 text-lg">Table Tennis Tournament Success</h4>
+                      <p className="text-sm text-orange-700 mt-2 leading-relaxed">
+                        NUML secured 2nd position in inter-university tournament with outstanding performance.
                       </p>
-                      <p className="text-xs text-orange-600 mt-2">November 28, 2024</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <p className="text-xs text-orange-600 font-medium">November 28, 2024</p>
+                        <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200">Achievement</Badge>
+                      </div>
                     </div>
                   </div>
                 </div>

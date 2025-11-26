@@ -11,7 +11,6 @@ import {
   Home, 
   Users, 
   Calendar, 
-  Plus, 
   Settings, 
   LogOut,
   MessageCircle,
@@ -44,7 +43,6 @@ const studentMenuItems: SidebarItem[] = [
   { icon: MessageCircle, label: 'Feed', href: '/student/feed' },
   { icon: Calendar, label: 'Upcoming Events', href: '/student/upcoming-events' },
   { icon: Trophy, label: 'Recent Events', href: '/student/recent-events' },
-  { icon: Plus, label: 'Create Post', href: '/student/create-post' },
   { icon: Users, label: 'My Team', href: '/student/my-team' },
   { icon: Settings, label: 'Settings', href: '/student/settings' },
 ]

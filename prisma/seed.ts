@@ -263,7 +263,6 @@ async function main() {
     data: {
       userID: admin.id,
       content: '🏏 Cricket tournament registration is now open! All interested students can register at the sports office. Last date for registration: March 10, 2024. #Cricket #Tournament',
-      imageURL: 'https://unsplash.com/photos/a-group-of-men-standing-next-to-each-other-on-a-field-sAC58O7CQWE?w=800&h=600&fit=crop',
     },
   })
 
@@ -278,7 +277,6 @@ async function main() {
     data: {
       userID: admin.id,
       content: '🏆 Congratulations to our Badminton team for winning the regional championship! The team showed exceptional skill and sportsmanship. We are proud of your achievement! #Champions #Badminton',
-      imageURL: 'https://images.unsplash.com/photo-1592656074407-9b5a33e2b59b?w=800&h=600&fit=crop',
     },
   })
 

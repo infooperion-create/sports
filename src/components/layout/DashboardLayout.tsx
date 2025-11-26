@@ -23,7 +23,6 @@ function getPageTitle(pathname: string, userType: 'student' | 'admin'): string {
   const titles: Record<string, string> = {
     'dashboard': 'Dashboard',
     'feed': 'Community Feed',
-    'create-post': 'Create Post',
     'my-team': 'My Team',
     'teams': 'Teams',
     'events': 'Events',
