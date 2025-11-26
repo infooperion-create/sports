@@ -117,18 +117,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const team = await db.team.create({
-      data: {
-        name,
-        sport,
-        department,
-        coachId,
-        creator: {
-          connect: {
-            id: decoded.userId
-          }
+    // Prepare team data
+    const teamData: any = {
+      name,
+      sport,
+      department,
+      creator: {
+        connect: {
+          id: decoded.userId
         }
-      },
+      }
+    }
+
+    // Only add coach if it's provided and not empty
+    if (coachId && coachId.trim() !== '') {
+      teamData.coach = {
+        connect: {
+          id: coachId
+        }
+      }
+    }
+
+    const team = await db.team.create({
+      data: teamData,
       include: {
         creator: {
           select: {
@@ -205,14 +216,31 @@ export async function PUT(request: NextRequest) {
       )
     }
 
+    // Prepare update data
+    const updateData: any = {
+      name,
+      sport,
+      department
+    }
+
+    // Only add coach if it's provided (can be empty string to remove coach)
+    if (coachId !== undefined) {
+      if (coachId && coachId.trim() !== '') {
+        updateData.coach = {
+          connect: {
+            id: coachId
+          }
+        }
+      } else {
+        updateData.coach = {
+          disconnect: true
+        }
+      }
+    }
+
     const team = await db.team.update({
       where: { id },
-      data: {
-        name,
-        sport,
-        department,
-        coachId
-      },
+      data: updateData,
       include: {
         creator: {
           select: {

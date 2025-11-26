@@ -137,7 +137,7 @@ export default function StudentDashboard() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, {data.student.name}!</h1>
+              <h1 className="text-3xl font-bold mb-2">Welcome back, {data.student.name}! 👋</h1>
               <p className="text-blue-100 text-lg">Ready to achieve your sports goals today?</p>
             </div>
             <div className="hidden lg:block">
@@ -202,8 +202,8 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Recent Events Section */}
           <div className="lg:col-span-2">
-            <Card className="h-full shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
+            <Card className="h-full shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg p-6">
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="h-5 w-5" />
                   <span>Recent Events & Achievements</span>
@@ -294,8 +294,8 @@ export default function StudentDashboard() {
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Team Status */}
-            <Card className="shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-teal-500 to-green-500 text-white rounded-t-lg">
+            <Card className="shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-teal-500 to-green-500 text-white rounded-t-lg p-6">
                 <CardTitle className="flex items-center space-x-2">
                   <Users className="h-5 w-5" />
                   <span>Team Status</span>
@@ -339,8 +339,8 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Upcoming Events */}
-            <Card className="shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg">
+            <Card className="shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg p-6">
                 <CardTitle className="flex items-center space-x-2">
                   <Clock className="h-5 w-5" />
                   <span>Upcoming Events</span>
@@ -381,8 +381,8 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-t-lg">
+            <Card className="shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-t-lg p-6">
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-3">
