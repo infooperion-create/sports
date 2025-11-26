@@ -187,6 +187,75 @@ async function main() {
     },
   })
 
+  // Recent Events (Completed)
+  const recentEvent1 = await prisma.event.create({
+    data: {
+      title: 'Inter-Department Cricket Championship',
+      description: ' thrilling cricket match between Computer Science and Engineering departments. Computer Science won by 3 wickets in a nail-biting finish!',
+      date: new Date('2025-01-15T10:00:00Z'),
+      sport: 'Cricket',
+      type: 'TOURNAMENT',
+      location: 'NUML Sports Ground',
+      status: 'COMPLETED',
+      createdBy: admin.id,
+    },
+  })
+
+  const recentEvent2 = await prisma.event.create({
+    data: {
+      title: 'Basketball Friendly Match',
+      description: 'An exciting basketball match between NUML Basketball Club and visiting team from Punjab University. NUML won 78-72.',
+      date: new Date('2025-01-10T16:00:00Z'),
+      sport: 'Basketball',
+      type: 'MATCH',
+      location: 'Indoor Sports Complex',
+      teamAID: basketballTeam.id,
+      status: 'COMPLETED',
+      scoreA: 78,
+      scoreB: 72,
+      createdBy: admin.id,
+    },
+  })
+
+  const recentEvent3 = await prisma.event.create({
+    data: {
+      title: 'Annual Sports Day 2024',
+      description: 'A grand celebration of sports with multiple events including track and field, volleyball, and tug-of-war. Over 500 students participated.',
+      date: new Date('2024-12-20T09:00:00Z'),
+      sport: 'Multi-Sport',
+      type: 'TOURNAMENT',
+      location: 'Main Sports Ground',
+      status: 'COMPLETED',
+      createdBy: admin.id,
+    },
+  })
+
+  const recentEvent4 = await prisma.event.create({
+    data: {
+      title: 'Football Training Camp',
+      description: 'Week-long intensive training camp for the football team conducted by professional coaches from Pakistan Football Federation.',
+      date: new Date('2024-12-05T08:00:00Z'),
+      sport: 'Football',
+      type: 'PRACTICE',
+      location: 'Football Training Ground',
+      status: 'COMPLETED',
+      createdBy: admin.id,
+    },
+  })
+
+  const recentEvent5 = await prisma.event.create({
+    data: {
+      title: 'Table Tennis Tournament',
+      description: 'Inter-university table tennis tournament with participants from 12 universities. NUML secured 2nd position in team event.',
+      date: new Date('2024-11-28T11:00:00Z'),
+      sport: 'Table Tennis',
+      type: 'TOURNAMENT',
+      location: 'Indoor Sports Complex',
+      status: 'COMPLETED',
+      createdBy: admin.id,
+    },
+  })
+
   console.log('📝 Creating posts...')
 
   // Create posts - only admin posts
@@ -228,7 +297,7 @@ async function main() {
   console.log('\n📊 Summary:')
   console.log(`   Users: 4 (1 Admin, 3 Students)`)
   console.log(`   Teams: 4 (Cricket, Football, Basketball, Badminton)`)
-  console.log(`   Events: 5 (3 Tournaments, 2 Matches)`)
+  console.log(`   Events: 10 (5 Tournaments, 3 Matches, 1 Training, 1 Multi-Sport)`)
   console.log(`   Posts: 3 (Admin announcements only)`)
   console.log('\n🏫 Team-Department Structure:')
   console.log('   Cricket Team: BS Computer Science')

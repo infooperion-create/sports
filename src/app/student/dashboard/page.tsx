@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { Calendar, Clock, Users, Plus } from 'lucide-react'
+import { Calendar, Clock, Users, Plus, Trophy, Target, TrendingUp, Activity, Star } from 'lucide-react'
 import Link from 'next/link'
 
 interface StudentData {
@@ -132,95 +132,149 @@ export default function StudentDashboard() {
       onLogout={handleLogout}
     >
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Feed Section */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Calendar className="h-5 w-5 text-blue-600" />
-                  <span>Community Feed</span>
-                </CardTitle>
-                <CardDescription>Latest updates from your sports community</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {data.posts.length > 0 ? (
-                    data.posts.slice(0, 5).map((post, index) => (
-                      <div key={post.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                        <Avatar>
-                          <AvatarFallback>
-                            {post.user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-2">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {post.user.name}
-                            </p>
-                            <Badge variant={post.user.role === 'ADMIN' ? 'destructive' : 'secondary'}>
-                              {post.user.role}
-                            </Badge>
-                            {post.user.team && (
-                              <Badge variant="outline">
-                                {post.user.team.name}
-                              </Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                            {post.content}
-                          </p>
-                          {/* Add generated images to posts */}
-                          {index === 0 && !post.imageURL && (
-                            <img 
-                              src="/basketball-post.jpg" 
-                              alt="Basketball game"
-                              className="w-full rounded-lg object-cover h-48 mt-2"
-                            />
-                          )}
-                          {index === 1 && !post.imageURL && (
-                            <img 
-                              src="/victory-celebration.jpg" 
-                              alt="Victory celebration"
-                              className="w-full rounded-lg object-cover h-48 mt-2"
-                            />
-                          )}
-                          {index === 2 && !post.imageURL && (
-                            <img 
-                              src="/soccer-match.jpg" 
-                              alt="Soccer match"
-                              className="w-full rounded-lg object-cover h-48 mt-2"
-                            />
-                          )}
-                          {post.imageURL && (
-                            <img 
-                              src={post.imageURL} 
-                              alt="Post image"
-                              className="w-full rounded-lg object-cover h-48 mt-2"
-                            />
-                          )}
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(post.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <p>No posts yet. Be the first to share something!</p>
-                    </div>
-                  )}
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Welcome Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Welcome back, {data.student.name}! 👋</h1>
+              <p className="text-blue-100 text-lg">Ready to achieve your sports goals today?</p>
+            </div>
+            <div className="hidden lg:block">
+              <Trophy className="h-16 w-16 text-yellow-300" />
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-blue-600 text-sm font-medium">Team Status</p>
+                  <p className="text-2xl font-bold text-blue-900">
+                    {data.student.team ? 'Active' : 'Unassigned'}
+                  </p>
                 </div>
-                {data.posts.length > 5 && (
-                  <div className="text-center pt-4">
-                    <Link href="/student/feed">
-                      <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
-                        View All Posts ({data.posts.length})
-                      </Badge>
-                    </Link>
+                <Users className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-green-600 text-sm font-medium">Upcoming Events</p>
+                  <p className="text-2xl font-bold text-green-900">{data.events.length}</p>
+                </div>
+                <Calendar className="h-8 w-8 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-purple-600 text-sm font-medium">Community Posts</p>
+                  <p className="text-2xl font-bold text-purple-900">{data.posts.length}</p>
+                </div>
+                <Activity className="h-8 w-8 text-purple-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-orange-600 text-sm font-medium">Performance</p>
+                  <p className="text-2xl font-bold text-orange-900">Excellent</p>
+                </div>
+                <Target className="h-8 w-8 text-orange-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Recent Events Section */}
+          <div className="lg:col-span-2">
+            <Card className="h-full">
+              <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-t-lg">
+                <CardTitle className="flex items-center space-x-2">
+                  <Trophy className="h-5 w-5" />
+                  <span>Recent Events & Achievements</span>
+                </CardTitle>
+                <CardDescription className="text-indigo-100">
+                  Latest sports activities and accomplishments
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {/* Sample recent events since we don't have them in API yet */}
+                  <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <Trophy className="h-5 w-5 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-green-900">Inter-Department Cricket Championship</h4>
+                      <p className="text-sm text-green-700 mt-1">
+                        Computer Science won by 3 wickets in a thrilling finish!
+                      </p>
+                      <p className="text-xs text-green-600 mt-2">January 15, 2025</p>
+                    </div>
                   </div>
-                )}
+
+                  <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Star className="h-5 w-5 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-blue-900">Basketball Friendly Match Victory</h4>
+                      <p className="text-sm text-blue-700 mt-1">
+                        NUML Basketball Club defeated Punjab University 78-72
+                      </p>
+                      <p className="text-xs text-blue-600 mt-2">January 10, 2025</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                        <Activity className="h-5 w-5 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-purple-900">Annual Sports Day 2024</h4>
+                      <p className="text-sm text-purple-700 mt-1">
+                        Grand celebration with 500+ participants across multiple sports
+                      </p>
+                      <p className="text-xs text-purple-600 mt-2">December 20, 2024</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                        <Target className="h-5 w-5 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-orange-900">Table Tennis Tournament Success</h4>
+                      <p className="text-sm text-orange-700 mt-1">
+                        NUML secured 2nd position in inter-university tournament
+                      </p>
+                      <p className="text-xs text-orange-600 mt-2">November 28, 2024</p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -228,40 +282,43 @@ export default function StudentDashboard() {
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Team Status */}
-            <Card>
-              <CardHeader>
+            <Card className="shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-teal-500 to-green-500 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
-                  <Users className="h-5 w-5 text-green-600" />
+                  <Users className="h-5 w-5" />
                   <span>Team Status</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 {data.student.team ? (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-2">
-                        <span className="text-green-800 font-bold text-xl">
+                      <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-teal-400 to-green-400 rounded-full mb-3 shadow-lg">
+                        <span className="text-white font-bold text-2xl">
                           {data.student.team.name.charAt(0)}
                         </span>
                       </div>
-                      <h3 className="font-semibold text-lg">{data.student.team.name}</h3>
-                      <Badge variant="outline" className="mb-2">
+                      <h3 className="font-bold text-xl text-gray-900">{data.student.team.name}</h3>
+                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200 mt-2">
                         {data.student.team.sport}
                       </Badge>
                     </div>
-                    <div className="text-sm text-gray-600">
-                      <p>🎉 Active member</p>
-                      <p>Team ID: {data.student.team.id}</p>
+                    <div className="bg-green-50 rounded-lg p-4">
+                      <div className="flex items-center space-x-2 text-green-700">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="font-medium">Active Team Member</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">Team ID: {data.student.team.id}</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-4">
-                    <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="font-semibold text-lg mb-2">No Team Assigned</h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      You haven't been assigned to a team yet. Contact your sports administrator to get added to a team.
+                  <div className="text-center py-6">
+                    <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="font-bold text-xl mb-2 text-gray-900">No Team Assigned</h3>
+                    <p className="text-sm text-gray-600 mb-4 px-4">
+                      Contact your sports administrator to join a team and start participating in events.
                     </p>
-                    <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
+                    <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
                       Request Team Assignment
                     </Badge>
                   </div>
@@ -270,39 +327,39 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Upcoming Events */}
-            <Card>
-              <CardHeader>
+            <Card className="shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-orange-600" />
-                  <span>Next Event</span>
+                  <Clock className="h-5 w-5" />
+                  <span>Upcoming Events</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 {data.events.length > 0 ? (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {data.events.slice(0, 3).map((event) => (
-                      <div key={event.id} className="border-l-4 border-blue-500 pl-4">
-                        <h4 className="font-medium text-gray-900">{event.title}</h4>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600 mt-1">
-                          <Clock className="h-4 w-4" />
+                      <div key={event.id} className="border-l-4 border-orange-500 pl-4 py-2 bg-orange-50 rounded-r-lg">
+                        <h4 className="font-semibold text-gray-900">{event.title}</h4>
+                        <div className="flex items-center space-x-2 text-sm text-gray-600 mt-2">
+                          <Clock className="h-4 w-4 text-orange-500" />
                           <span>{new Date(event.date).toLocaleDateString()}</span>
                         </div>
-                        <Badge variant="outline" className="mt-2">
+                        <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 mt-2">
                           {event.sport}
                         </Badge>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-4">
-                    <Clock className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <p className="text-sm text-gray-600">No upcoming events</p>
+                  <div className="text-center py-6">
+                    <Clock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-600">No upcoming events scheduled</p>
                   </div>
                 )}
                 {data.events.length > 3 && (
                   <div className="text-center pt-4">
                     <Link href="/student/upcoming-events">
-                      <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
+                      <Badge variant="outline" className="cursor-pointer hover:bg-orange-100 border-orange-300 text-orange-700">
                         View All Events ({data.events.length})
                       </Badge>
                     </Link>
@@ -312,25 +369,31 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Quick Actions */}
-            <Card>
-              <CardHeader>
+            <Card className="shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-t-lg">
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="p-6 space-y-3">
                 <Link href="/student/feed">
-                  <Button className="w-full justify-start" variant="outline">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    View Feed
+                  <Button className="w-full justify-start bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200">
+                    <Calendar className="h-4 w-4 mr-3" />
+                    View Community Feed
                   </Button>
                 </Link>
                 {data.student.team && (
                   <Link href="/student/my-team">
-                    <Button className="w-full justify-start" variant="outline">
-                      <Users className="h-4 w-4 mr-2" />
-                      Team Details
+                    <Button className="w-full justify-start bg-green-50 hover:bg-green-100 text-green-700 border border-green-200">
+                      <Users className="h-4 w-4 mr-3" />
+                      My Team Details
                     </Button>
                   </Link>
                 )}
+                <Link href="/student/events">
+                  <Button className="w-full justify-start bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200">
+                    <Trophy className="h-4 w-4 mr-3" />
+                    Browse Events
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
