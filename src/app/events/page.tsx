@@ -14,8 +14,20 @@ export default function EventsPage() {
       
       <main className="flex-grow">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative text-white">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="/pakistani-cricket-boys.jpg"
+            alt="NUML Sports Events"
+            className="w-full h-full object-cover"
+          />
+          {/* Colored Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/85 to-blue-800/85"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-white p-2 shadow-lg">
               <img

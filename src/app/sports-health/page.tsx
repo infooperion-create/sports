@@ -14,8 +14,20 @@ export default function SportsHealthPage() {
       
       <main className="flex-grow">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-green-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative text-white">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="/pakistani-sports-health.jpg"
+            alt="Sports and Health"
+            className="w-full h-full object-cover"
+          />
+          {/* Colored Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/85 to-green-600/85"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-white p-2 shadow-lg">
               <img
@@ -207,21 +219,60 @@ export default function SportsHealthPage() {
             <h2 className="text-3xl font-bold">Sports Excellence & Achievements</h2>
           </div>
 
-          <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-8">
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div>
-                <div className="text-4xl font-bold text-blue-600 mb-2">Gold Medals</div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-40 relative overflow-hidden">
+                <img
+                  src="/gold-medals-winners.jpg"
+                  alt="Gold Medals Achievement"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 to-transparent flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-white mb-1">Gold Medals</div>
+                  </div>
+                </div>
+              </div>
+              <CardContent className="p-4 text-center">
                 <p className="text-gray-600">Students winning gold at national inter-university championships</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-40 relative overflow-hidden">
+                <img
+                  src="/sports-gala-event.jpg"
+                  alt="Sports Gala Events"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-600/80 to-transparent flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-white mb-1">Sports Galas</div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="text-4xl font-bold text-green-600 mb-2">Sports Galas</div>
+              <CardContent className="p-4 text-center">
                 <p className="text-gray-600">Annual sports events promoting physical fitness and teamwork</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="h-40 relative overflow-hidden">
+                <img
+                  src="/sports-championship.jpg"
+                  alt="Sports Championships"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-yellow-600/80 to-transparent flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-white mb-1">Championships</div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div className="text-4xl font-bold text-yellow-600 mb-2">Championships</div>
+              <CardContent className="p-4 text-center">
                 <p className="text-gray-600">Regular competitions in various sports disciplines</p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 

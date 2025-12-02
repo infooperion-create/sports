@@ -217,8 +217,15 @@ export default function AchievementsPage() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                  <div className="h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
-                    <Trophy className="w-20 h-20 text-white" />
+                  <div className="h-48 relative overflow-hidden">
+                    <img
+                      src="/volleyball-champions.jpg"
+                      alt="HEC Championship Winners"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                      <Trophy className="w-20 h-20 text-white drop-shadow-lg" />
+                    </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-2xl font-bold mb-3">HEC Championship Winners</h3>
@@ -235,8 +242,15 @@ export default function AchievementsPage() {
 
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                  <div className="h-48 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
-                    <Medal className="w-20 h-20 text-white" />
+                  <div className="h-48 relative overflow-hidden">
+                    <img
+                      src="/national-team-selection.jpg"
+                      alt="National Team Selections"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                      <Medal className="w-20 h-20 text-white drop-shadow-lg" />
+                    </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-2xl font-bold mb-3">National Team Selections</h3>
@@ -253,8 +267,15 @@ export default function AchievementsPage() {
 
               <div className="group cursor-pointer">
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                  <div className="h-48 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-                    <Star className="w-20 h-20 text-white" />
+                  <div className="h-48 relative overflow-hidden">
+                    <img
+                      src="/table-tennis-excellence.jpg"
+                      alt="Table Tennis Excellence"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                      <Star className="w-20 h-20 text-white drop-shadow-lg" />
+                    </div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-2xl font-bold mb-3">Table Tennis Excellence</h3>
