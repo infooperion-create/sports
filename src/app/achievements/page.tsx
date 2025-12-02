@@ -223,7 +223,7 @@ export default function AchievementsPage() {
                       alt="HEC Championship Winners"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 via-blue-500/50 to-transparent flex items-center justify-center">
                       <Trophy className="w-20 h-20 text-white drop-shadow-lg" />
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export default function AchievementsPage() {
                       alt="National Team Selections"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 via-blue-500/50 to-transparent flex items-center justify-center">
                       <Medal className="w-20 h-20 text-white drop-shadow-lg" />
                     </div>
                   </div>
@@ -273,7 +273,7 @@ export default function AchievementsPage() {
                       alt="Table Tennis Excellence"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/80 via-blue-500/50 to-transparent flex items-center justify-center">
                       <Star className="w-20 h-20 text-white drop-shadow-lg" />
                     </div>
                   </div>
