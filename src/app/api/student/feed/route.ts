@@ -28,11 +28,6 @@ export async function GET(request: NextRequest) {
     }
 
     const posts = await db.post.findMany({
-      where: {
-        user: {
-          role: 'ADMIN'
-        }
-      },
       take: 20,
       orderBy: { createdAt: 'desc' },
       include: {
@@ -107,6 +102,7 @@ export async function POST(request: NextRequest) {
       data: {
         content,
         imageURL,
+        postType: 'POST',
         userID: decoded.userId
       },
       include: {

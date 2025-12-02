@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
       data: {
         content,
         imageURL,
+        postType: 'ANNOUNCEMENT',
         userID: decoded.userId
       },
       include: {

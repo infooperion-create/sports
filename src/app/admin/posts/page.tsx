@@ -11,12 +11,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { MessageSquare, Plus, Edit, Trash2, Search, Filter, Eye, MessageCircle, Heart, Share } from 'lucide-react'
+import { MessageSquare, Plus, Edit, Trash2, Search, Filter, Eye, MessageCircle, Heart, Share, Megaphone, FileText } from 'lucide-react'
 
 interface Post {
   id: string
   content: string
   imageURL?: string
+  postType: 'POST' | 'ANNOUNCEMENT'
   createdAt: string
   user: {
     name: string
@@ -560,6 +561,19 @@ export default function AdminPosts() {
                         <p className="font-medium text-gray-900">{post.user.name}</p>
                         <Badge variant={post.user.role === 'ADMIN' ? 'destructive' : 'secondary'} className="text-xs">
                           {post.user.role}
+                        </Badge>
+                        <Badge variant={post.postType === 'ANNOUNCEMENT' ? 'default' : 'outline'} className="text-xs">
+                          {post.postType === 'ANNOUNCEMENT' ? (
+                            <>
+                              <Megaphone className="w-3 h-3 mr-1" />
+                              Announcement
+                            </>
+                          ) : (
+                            <>
+                              <FileText className="w-3 h-3 mr-1" />
+                              Post
+                            </>
+                          )}
                         </Badge>
                         {post.user.team && (
                           <Badge variant="outline" className="bg-blue-100 text-blue-800">

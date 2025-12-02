@@ -102,6 +102,7 @@ model Post {
   userID    String
   content   String
   imageURL  String?
+  postType  PostType @default(POST)  // POST, ANNOUNCEMENT
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -114,6 +115,11 @@ model Post {
 enum Role {
   STUDENT
   ADMIN
+}
+
+enum PostType {
+  POST
+  ANNOUNCEMENT
 }
 
 enum EventType {

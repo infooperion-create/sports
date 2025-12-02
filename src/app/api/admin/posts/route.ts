@@ -64,6 +64,81 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// POST create post
+export async function POST(request: NextRequest) {
+  try {
+    // Get token from Authorization header or cookies
+    const authHeader = request.headers.get('Authorization')
+    const token = authHeader?.replace('Bearer ', '') || 
+                  request.cookies.get('token')?.value
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Unauthorized - No token' },
+        { status: 401 }
+      )
+    }
+
+    // Verify token
+    const decoded = verifyToken(token)
+
+    if (!decoded) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid token' },
+        { status: 401 }
+      )
+    }
+
+    // Check if user is admin
+    if (decoded.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    const { content, imageURL } = await request.json()
+
+    if (!content) {
+      return NextResponse.json(
+        { error: 'Content is required' },
+        { status: 400 }
+      )
+    }
+
+    const post = await db.post.create({
+      data: {
+        content,
+        imageURL,
+        postType: 'POST',
+        userID: decoded.userId
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            role: true,
+            team: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return NextResponse.json(post, { status: 201 })
+  } catch (error) {
+    console.error('Error creating post:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
 // PUT update post (admin can update any post)
 export async function PUT(request: NextRequest) {
   try {

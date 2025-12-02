@@ -21,7 +21,9 @@ import {
   Share,
   MoreHorizontal,
   Calendar,
-  Users
+  Users,
+  Megaphone,
+  FileText
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -29,6 +31,7 @@ interface Post {
   id: string
   content: string
   imageURL?: string
+  postType: 'POST' | 'ANNOUNCEMENT'
   createdAt: string
   user: {
     name: string
@@ -146,20 +149,26 @@ export default function StudentFeed() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Admin Announcements</h1>
-            <p className="text-gray-600 mt-1">Official announcements and updates from sports administrators</p>
+            <h1 className="text-2xl font-bold text-gray-900">Sports Feed</h1>
+            <p className="text-gray-600 mt-1">Posts and announcements from the sports community</p>
           </div>
         </div>
 
         {/* Posts Feed */}
         <div className="space-y-6">
           {posts.map((post) => (
-            <Card key={post.id} className="hover:shadow-lg transition-all duration-200 overflow-hidden">
+            <Card key={post.id} className={`hover:shadow-lg transition-all duration-200 overflow-hidden ${
+              post.postType === 'ANNOUNCEMENT' ? 'border-l-4 border-l-orange-500 bg-orange-50/30' : ''
+            }`}>
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-3">
                     <Avatar className="w-12 h-12">
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white font-semibold">
+                      <AvatarFallback className={`font-semibold ${
+                        post.postType === 'ANNOUNCEMENT' 
+                          ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white' 
+                          : 'bg-gradient-to-br from-blue-500 to-purple-500 text-white'
+                      }`}>
                         {post.user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -170,6 +179,19 @@ export default function StudentFeed() {
                         </p>
                         <Badge variant={post.user.role === 'ADMIN' ? 'destructive' : 'secondary'} className="text-xs">
                           {post.user.role}
+                        </Badge>
+                        <Badge variant={post.postType === 'ANNOUNCEMENT' ? 'default' : 'outline'} className="text-xs">
+                          {post.postType === 'ANNOUNCEMENT' ? (
+                            <>
+                              <Megaphone className="w-3 h-3 mr-1" />
+                              Announcement
+                            </>
+                          ) : (
+                            <>
+                              <FileText className="w-3 h-3 mr-1" />
+                              Post
+                            </>
+                          )}
                         </Badge>
                         {post.user.team && (
                           <Badge variant="outline" className="text-xs">
@@ -227,10 +249,11 @@ export default function StudentFeed() {
                         src={post.imageURL} 
                         alt="Post image"
                         className="w-full rounded-lg object-cover max-h-96 transition-transform duration-200 group-hover:scale-[1.02]"
+                        onError={(e) => {
+                          console.error('Image failed to load:', post.imageURL);
+                          e.currentTarget.style.display = 'none';
+                        }}
                       />
-                      
-                      {/* Image overlay for better visual feedback */}
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5 rounded-lg transition-all duration-200 pointer-events-none"></div>
                     </div>
                   )}
                 </div>
@@ -244,8 +267,8 @@ export default function StudentFeed() {
             <div className="h-16 w-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageCircle className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">No Announcements Yet</h3>
-            <p className="text-gray-500">Check back later for official announcements from sports administrators</p>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No Posts Yet</h3>
+            <p className="text-gray-500">Check back later for posts and announcements from the sports community</p>
           </div>
         )}
       </div>
