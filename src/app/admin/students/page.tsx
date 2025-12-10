@@ -7,11 +7,12 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
+import ProfileView from '@/components/layout/ProfileView'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Users, Plus, Edit, Trash2, Search, Filter, Mail, Phone } from 'lucide-react'
+import { Users, Plus, Edit, Trash2, Search, Filter, Mail, Phone, Eye } from 'lucide-react'
 
 interface Student {
   id: string
@@ -19,6 +20,8 @@ interface Student {
   email: string
   studentID: string
   role: string
+  department?: string
+  profileCompleted: boolean
   team?: {
     id: string
     name: string
@@ -32,6 +35,8 @@ export default function AdminStudents() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false)
   const [userName, setUserName] = useState('')
   const [formData, setFormData] = useState({
     name: '',
@@ -149,6 +154,37 @@ export default function AdminStudents() {
 
   const handleLogout = () => {
     router.push('/')
+  }
+
+  const handleViewProfile = async (student: Student) => {
+    try {
+      let token = localStorage.getItem('token')
+      
+      if (!token) {
+        const cookies = document.cookie.split(';')
+        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('token='))
+        if (tokenCookie) {
+          token = tokenCookie.trim().split('=')[1]
+        }
+      }
+
+      const response = await fetch(`/api/admin/users/${student.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        const studentData = await response.json()
+        setSelectedStudent(studentData)
+        setIsProfileDialogOpen(true)
+      } else {
+        alert('Failed to fetch student profile')
+      }
+    } catch (error) {
+      console.error('Error fetching student profile:', error)
+      alert('Error fetching student profile')
+    }
   }
 
   const filteredStudents = students.filter(student =>
@@ -300,7 +336,9 @@ export default function AdminStudents() {
                     <th className="text-left p-3 font-medium text-gray-900">Student</th>
                     <th className="text-left p-3 font-medium text-gray-900">Email</th>
                     <th className="text-left p-3 font-medium text-gray-900">Student ID</th>
+                    <th className="text-left p-3 font-medium text-gray-900">Department</th>
                     <th className="text-left p-3 font-medium text-gray-900">Team</th>
+                    <th className="text-left p-3 font-medium text-gray-900">Profile</th>
                     <th className="text-left p-3 font-medium text-gray-900">Actions</th>
                   </tr>
                 </thead>
@@ -332,6 +370,9 @@ export default function AdminStudents() {
                         <span className="text-gray-600">{student.studentID}</span>
                       </td>
                       <td className="p-3">
+                        <span className="text-gray-600">{student.department || 'N/A'}</span>
+                      </td>
+                      <td className="p-3">
                         {student.team ? (
                           <Badge variant="outline" className="bg-blue-100 text-blue-800">
                             {student.team.name}
@@ -341,7 +382,20 @@ export default function AdminStudents() {
                         )}
                       </td>
                       <td className="p-3">
+                        <Badge className={student.profileCompleted ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                          {student.profileCompleted ? 'Complete' : 'Incomplete'}
+                        </Badge>
+                      </td>
+                      <td className="p-3">
                         <div className="flex items-center space-x-2">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => handleViewProfile(student)}
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
                           <Button variant="ghost" size="sm">
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -364,6 +418,32 @@ export default function AdminStudents() {
             )}
           </CardContent>
         </Card>
+
+        {/* Student Profile Dialog */}
+        <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
+          <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Student Profile</DialogTitle>
+              <DialogDescription>
+                Comprehensive view of student's profile information
+              </DialogDescription>
+            </DialogHeader>
+            {selectedStudent && (
+              <div className="mt-4">
+                <ProfileView 
+                  user={selectedStudent}
+                  showEditButton={false}
+                  title="Student Profile"
+                />
+              </div>
+            )}
+            <DialogFooter>
+              <Button onClick={() => setIsProfileDialogOpen(false)}>
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   )

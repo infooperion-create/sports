@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
+import ProfileView from '@/components/layout/ProfileView'
 import { User, Calendar, Phone, Home, AlertTriangle, Trophy, Target, Award, Star, Camera } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -17,6 +18,7 @@ interface StudentData {
   name: string
   email: string
   studentID: string
+  department?: string
   team?: {
     id: string
     name: string
@@ -40,6 +42,7 @@ export default function StudentSettings() {
   const [studentData, setStudentData] = useState<StudentData | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -194,6 +197,7 @@ export default function StudentSettings() {
         
         // Refresh student data
         await fetchStudentData()
+        setIsEditing(false)
       } else {
         toast({
           title: "Error",
@@ -212,6 +216,41 @@ export default function StudentSettings() {
     }
   }
 
+  const handleEditProfile = () => {
+    setIsEditing(true)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    // Reset form data to original values
+    if (studentData) {
+      let sportsInterests = ''
+      if (studentData.sportsInterests) {
+        try {
+          const parsed = JSON.parse(studentData.sportsInterests)
+          sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : studentData.sportsInterests
+        } catch {
+          sportsInterests = studentData.sportsInterests
+        }
+      }
+      
+      setFormData({
+        name: studentData.name,
+        email: studentData.email,
+        dateOfBirth: studentData.dateOfBirth ? new Date(studentData.dateOfBirth).toISOString().split('T')[0] : '',
+        phoneNumber: studentData.phoneNumber || '',
+        address: studentData.address || '',
+        emergencyContact: studentData.emergencyContact || '',
+        medicalConditions: studentData.medicalConditions || '',
+        sportsInterests: sportsInterests,
+        skillLevel: studentData.skillLevel || '',
+        preferredPosition: studentData.preferredPosition || '',
+        experience: studentData.experience || '',
+        achievements: studentData.achievements || ''
+      })
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -224,6 +263,27 @@ export default function StudentSettings() {
     return null
   }
 
+  // Show profile view if profile is completed and not editing
+  if (studentData.profileCompleted && !isEditing) {
+    return (
+      <DashboardLayout
+        userType="student"
+        userName={studentData.name}
+        studentId={studentData.studentID}
+        teamName={studentData.team?.name}
+        onLogout={handleLogout}
+        userData={studentData}
+      >
+        <ProfileView 
+          user={studentData}
+          onEdit={handleEditProfile}
+          title="My Profile"
+        />
+      </DashboardLayout>
+    )
+  }
+
+  // Show edit form for incomplete profiles or when editing
   const completionPercentage = calculateProfileCompletion()
 
   return (
@@ -236,6 +296,31 @@ export default function StudentSettings() {
       userData={studentData}
     >
       <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {isEditing ? 'Edit Profile' : 'Complete Your Profile'}
+            </h1>
+            <p className="text-gray-600 mt-1">
+              {isEditing 
+                ? 'Update your profile information' 
+                : 'Complete your profile to get personalized recommendations and better team matching'
+              }
+            </p>
+          </div>
+          {isEditing && (
+            <div className="flex space-x-2">
+              <Button variant="outline" onClick={handleCancelEdit} disabled={saving}>
+                Cancel
+              </Button>
+              <Button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+                {saving ? 'Saving...' : 'Save Changes'}
+              </Button>
+            </div>
+          )}
+        </div>
+
         {/* Profile Completion Progress */}
         <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
           <CardHeader>
@@ -511,14 +596,16 @@ export default function StudentSettings() {
         </Card>
 
         {/* Save Button */}
-        <div className="flex justify-end space-x-4">
-          <Button variant="outline" onClick={() => router.push('/student/dashboard')}>
-            Cancel
-          </Button>
-          <Button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
-            {saving ? 'Saving...' : 'Save Profile'}
-          </Button>
-        </div>
+        {!isEditing && (
+          <div className="flex justify-end space-x-4">
+            <Button variant="outline" onClick={() => router.push('/student/dashboard')}>
+              Skip for Now
+            </Button>
+            <Button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+              {saving ? 'Saving...' : 'Complete Profile'}
+            </Button>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   )

@@ -35,14 +35,14 @@ export async function GET(request: NextRequest) {
     }
 
     const users = await db.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        studentID: true,
-        department: true,
-        role: true,
-        teamID: true
+      include: {
+        team: {
+          select: {
+            id: true,
+            name: true,
+            sport: true
+          }
+        }
       },
       orderBy: { name: 'asc' }
     })
