@@ -28,7 +28,7 @@ interface ProfileViewProps {
     id: string
     name: string
     email: string
-    studentID: string
+    studentID?: string  // Made optional for coaches
     department?: string
     dateOfBirth?: string
     phoneNumber?: string
@@ -177,9 +177,9 @@ export default function ProfileView({
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <IdCard className="w-4 h-4" />
-                  <span>Student ID</span>
+                  <span>{user.studentID ? 'Student ID' : 'User ID'}</span>
                 </div>
-                <p className="font-medium">{user.studentID}</p>
+                <p className="font-medium">{user.studentID || user.id}</p>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">

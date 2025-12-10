@@ -153,7 +153,8 @@ export default function Achievements() {
       award: Award,
       medal: Medal
     }
-    return iconMap[iconName as keyof typeof iconMap] || Trophy
+    const IconComponent = iconMap[iconName as keyof typeof iconMap] || Trophy
+    return <IconComponent className="w-8 h-8 text-white" />
   }
 
   const handleLogout = () => {

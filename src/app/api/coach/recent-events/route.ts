@@ -39,16 +39,19 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    let events = []
+    let events: any[] = []
     if (coach && coach.coachedTeams.length > 0) {
       // Get events for coach's teams
       events = await db.event.findMany({
         where: {
-          OR: coach.coachedTeams.map((team: any) => ({
-            teamAID: team.id
-          })).concat(coach.coachedTeams.map((team: any) => ({
-            teamBID: team.id
-          })))
+          OR: [
+            ...coach.coachedTeams.map((team: any) => ({
+              teamAID: team.id
+            })),
+            ...coach.coachedTeams.map((team: any) => ({
+              teamBID: team.id
+            }))
+          ]
         },
         orderBy: { date: 'desc' },
         take: 10,

@@ -235,8 +235,8 @@ export default function StudentSettings() {
       }
       
       setFormData({
-        name: studentData.name,
-        email: studentData.email,
+        name: studentData.name || '',
+        email: studentData.email || '',
         dateOfBirth: studentData.dateOfBirth ? new Date(studentData.dateOfBirth).toISOString().split('T')[0] : '',
         phoneNumber: studentData.phoneNumber || '',
         address: studentData.address || '',
@@ -397,7 +397,7 @@ export default function StudentSettings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="studentID">Student ID</Label>
-                <Input value={studentData.studentID} disabled className="mt-1 bg-gray-50" />
+                <Input value={studentData?.studentID || ''} disabled className="mt-1 bg-gray-50" />
               </div>
               <div>
                 <Label htmlFor="dateOfBirth">Date of Birth</Label>
@@ -578,7 +578,7 @@ export default function StudentSettings() {
               <div>
                 <Label>Current Team</Label>
                 <Input 
-                  value={studentData.team?.name || 'No team assigned'} 
+                  value={studentData?.team?.name || 'No team assigned'} 
                   disabled 
                   className="mt-1 bg-gray-50" 
                 />
@@ -586,7 +586,7 @@ export default function StudentSettings() {
               <div>
                 <Label>Sport</Label>
                 <Input 
-                  value={studentData.team?.sport || 'N/A'} 
+                  value={studentData?.team?.sport || 'N/A'} 
                   disabled 
                   className="mt-1 bg-gray-50" 
                 />

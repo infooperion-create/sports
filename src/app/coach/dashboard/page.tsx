@@ -370,7 +370,7 @@ export default function CoachDashboard() {
                 )}
                 {data.events.length > 3 && (
                   <div className="text-center pt-4">
-                    <Link href="/student/upcoming-events">
+                    <Link href="/coach/upcoming-events">
                       <Badge variant="outline" className="cursor-pointer hover:bg-orange-100 border-orange-300 text-orange-700">
                         View All Events ({data.events.length})
                       </Badge>
@@ -392,15 +392,15 @@ export default function CoachDashboard() {
                     View Community Feed
                   </Button>
                 </Link>
-                {data.student.team && (
-                  <Link href="/student/my-team">
+                {data.coach.team && (
+                  <Link href="/coach/my-team">
                     <Button className="w-full justify-start bg-green-50 hover:bg-green-100 text-green-700 border border-green-200">
                       <Users className="h-4 w-4 mr-3" />
                       My Team Details
                     </Button>
                   </Link>
                 )}
-                <Link href="/student/events">
+                <Link href="/coach/events">
                   <Button className="w-full justify-start bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200">
                     <Trophy className="h-4 w-4 mr-3" />
                     Browse Events

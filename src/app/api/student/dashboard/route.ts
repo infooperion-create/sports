@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Get team members if student has a team
-    let teamMembers = []
+    let teamMembers: Array<{name: string, email: string, studentID: string | null}> = []
     if (student.team) {
       teamMembers = await db.user.findMany({
         where: {

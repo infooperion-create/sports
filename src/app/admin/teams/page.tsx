@@ -24,6 +24,7 @@ interface Team {
     email: string
   }
   coach?: {
+    id: string
     name: string
     email: string
   }

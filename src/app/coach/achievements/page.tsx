@@ -48,7 +48,7 @@ export default function Achievements() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -56,10 +56,10 @@ export default function Achievements() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setStudentData(data.coach)
       }
     } catch (error) {
-      console.error('Error fetching student data:', error)
+      console.error('Error fetching coach data:', error)
     }
   }
 
@@ -153,7 +153,8 @@ export default function Achievements() {
       award: Award,
       medal: Medal
     }
-    return iconMap[iconName as keyof typeof iconMap] || Trophy
+    const IconComponent = iconMap[iconName as keyof typeof iconMap] || Trophy
+    return <IconComponent className="w-8 h-8 text-white" />
   }
 
   const handleLogout = () => {
@@ -170,9 +171,8 @@ export default function Achievements() {
 
   return (
     <DashboardLayout
-      userType="student"
+      userType="coach"
       userName={studentData?.name}
-      studentId={studentData?.studentID}
       teamName={studentData?.team?.name}
       onLogout={handleLogout}
     >

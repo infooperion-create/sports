@@ -19,7 +19,8 @@ import {
   MessageSquare,
   Users as TeamIcon,
   UserPlus,
-  Megaphone
+  Megaphone,
+  Shield
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -31,7 +32,7 @@ interface SidebarItem {
 }
 
 interface SidebarProps {
-  userType: 'student' | 'admin'
+  userType: 'student' | 'admin' | 'coach'
   userName?: string
   studentId?: string
   teamName?: string
@@ -47,9 +48,20 @@ const studentMenuItems: SidebarItem[] = [
   { icon: Settings, label: 'Settings', href: '/student/settings' },
 ]
 
+const coachMenuItems: SidebarItem[] = [
+  { icon: Home, label: 'Dashboard', href: '/coach/dashboard' },
+  { icon: MessageCircle, label: 'Feed', href: '/coach/feed' },
+  { icon: Calendar, label: 'Upcoming Events', href: '/coach/upcoming-events' },
+  { icon: Trophy, label: 'Recent Events', href: '/coach/recent-events' },
+  { icon: Users, label: 'My Team', href: '/coach/my-team' },
+  { icon: TeamIcon, label: 'Teams', href: '/coach/teams' },
+  { icon: Settings, label: 'Settings', href: '/coach/settings' },
+]
+
 const adminMenuItems: SidebarItem[] = [
   { icon: Home, label: 'Dashboard', href: '/admin/dashboard' },
   { icon: Users, label: 'Students', href: '/admin/students' },
+  { icon: Shield, label: 'Coaches', href: '/admin/coaches' },
   { icon: TeamIcon, label: 'Teams', href: '/admin/teams' },
   { icon: Calendar, label: 'Events', href: '/admin/events' },
   { icon: MessageSquare, label: 'Posts', href: '/admin/posts' },
@@ -66,7 +78,9 @@ function SidebarContent({
   isCollapsed = false 
 }: SidebarProps & { isCollapsed?: boolean }) {
   const pathname = usePathname()
-  const menuItems = userType === 'student' ? studentMenuItems : adminMenuItems
+  const menuItems = userType === 'student' ? studentMenuItems : 
+                    userType === 'coach' ? coachMenuItems : 
+                    adminMenuItems
 
   const handleLogout = () => {
     // Clear all authentication data immediately
@@ -115,6 +129,9 @@ function SidebarContent({
               )}
               {userType === 'admin' && (
                 <Badge variant="destructive" className="text-xs">Administrator</Badge>
+              )}
+              {userType === 'coach' && (
+                <Badge variant="default" className="text-xs bg-green-100 text-green-800">Coach</Badge>
               )}
               {teamName && (
                 <Badge variant="secondary" className="mt-1 bg-blue-100 text-blue-800 text-xs">

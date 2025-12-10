@@ -7,7 +7,7 @@ import ProfileCompletionAlert from './ProfileCompletionAlert'
 
 interface DashboardLayoutProps {
   children: ReactNode
-  userType: 'student' | 'admin'
+  userType: 'student' | 'admin' | 'coach'
   userName?: string
   studentId?: string
   teamName?: string
@@ -15,10 +15,14 @@ interface DashboardLayoutProps {
   userData?: any
 }
 
-function getPageTitle(pathname: string, userType: 'student' | 'admin'): string {
+function getPageTitle(pathname: string, userType: 'student' | 'admin' | 'coach'): string {
   const pathSegments = pathname.split('/').filter(Boolean)
   
-  if (pathSegments.length === 0) return `${userType === 'admin' ? 'Admin' : 'Student'} Dashboard`
+  if (pathSegments.length === 0) {
+    if (userType === 'admin') return 'Admin Dashboard'
+    if (userType === 'coach') return 'Coach Dashboard'
+    return 'Student Dashboard'
+  }
   
   const lastSegment = pathSegments[pathSegments.length - 1]
   
