@@ -17,9 +17,9 @@ export default function SignupPage() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'STUDENT', // Fixed to STUDENT only
+    role: 'STUDENT', // Allow STUDENT or COACH
     studentID: '',
-    department: '' // Added department field
+    department: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -52,7 +52,7 @@ export default function SignupPage() {
           password: formData.password,
           role: formData.role,
           studentID: formData.role === 'STUDENT' ? formData.studentID : undefined,
-          department: formData.role === 'STUDENT' ? formData.department : undefined
+          department: formData.department
         }),
       })
 
@@ -69,6 +69,8 @@ export default function SignupPage() {
       // Redirect based on role
       if (data.user.role === 'ADMIN') {
         router.push('/admin/dashboard')
+      } else if (data.user.role === 'COACH') {
+        router.push('/coach/dashboard')
       } else {
         router.push('/student/dashboard')
       }
@@ -155,6 +157,19 @@ export default function SignupPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="role">I am a...</Label>
+                  <Select value={formData.role} onValueChange={(value) => handleChange('role', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="STUDENT">Student</SelectItem>
+                      <SelectItem value="COACH">Coach</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="studentID">Student ID</Label>
                   <Input
                     id="studentID"
@@ -162,7 +177,8 @@ export default function SignupPage() {
                     placeholder="Enter your student ID"
                     value={formData.studentID}
                     onChange={(e) => handleChange('studentID', e.target.value)}
-                    required
+                    required={formData.role === 'STUDENT'}
+                    disabled={formData.role === 'COACH'}
                   />
                 </div>
 

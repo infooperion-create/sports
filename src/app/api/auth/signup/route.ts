@@ -4,11 +4,26 @@ import { hashPassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password, studentID, department } = await request.json()
+    const { name, email, password, studentID, department, role } = await request.json()
 
-    if (!name || !email || !password || !studentID || !department) {
+    if (!name || !email || !password || !department || !role) {
       return NextResponse.json(
         { error: 'All required fields must be provided' },
+        { status: 400 }
+      )
+    }
+
+    // Validate role-specific fields
+    if (role === 'STUDENT' && !studentID) {
+      return NextResponse.json(
+        { error: 'Student ID is required for students' },
+        { status: 400 }
+      )
+    }
+
+    if (role !== 'STUDENT' && role !== 'COACH') {
+      return NextResponse.json(
+        { error: 'Invalid role. Must be STUDENT or COACH' },
         { status: 400 }
       )
     }
@@ -25,8 +40,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if student ID already exists
-    if (studentID) {
+    // Check if student ID already exists (only for students)
+    if (role === 'STUDENT' && studentID) {
       const existingStudentID = await db.user.findUnique({
         where: { studentID }
       })
@@ -42,14 +57,14 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hashPassword(password)
 
-    // Create user - always as STUDENT
+    // Create user with specified role
     const user = await db.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role: 'STUDENT', // Always STUDENT
-        studentID: studentID,
+        role: role, // Use the role from request
+        studentID: role === 'STUDENT' ? studentID : null,
         department: department
       }
     })

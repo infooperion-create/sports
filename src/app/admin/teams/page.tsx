@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Users, Plus, Edit, Trash2, Crown, User } from 'lucide-react'
+import { Users, Plus, Edit, Trash2, Crown, User, UserPlus } from 'lucide-react'
 
 interface Team {
   id: string
@@ -45,6 +45,7 @@ export default function AdminTeams() {
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null)
   const [isMembersDialogOpen, setIsMembersDialogOpen] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false)
   const [students, setStudents] = useState<any[]>([])
   const [userName, setUserName] = useState('')
   const [formData, setFormData] = useState({
@@ -53,6 +54,10 @@ export default function AdminTeams() {
     department: '',
     captainId: '',
     coachId: ''
+  })
+  const [addMemberForm, setAddMemberForm] = useState({
+    userId: '',
+    role: 'MEMBER'
   })
   const router = useRouter()
 
@@ -225,6 +230,91 @@ export default function AdminTeams() {
     }
   }
 
+  const handleAddMember = async () => {
+    if (!selectedTeam || !addMemberForm.userId || !addMemberForm.role) {
+      alert('Please select a user and role')
+      return
+    }
+
+    try {
+      let token = localStorage.getItem('token')
+      
+      if (!token) {
+        const cookies = document.cookie.split(';')
+        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('token='))
+        if (tokenCookie) {
+          token = tokenCookie.trim().split('=')[1]
+        }
+      }
+
+      const response = await fetch('/api/admin/teams/members', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          teamId: selectedTeam.id,
+          userId: addMemberForm.userId,
+          role: addMemberForm.role
+        })
+      })
+
+      if (response.ok) {
+        await fetchTeams()
+        await fetchStudents()
+        setIsAddMemberDialogOpen(false)
+        setAddMemberForm({ userId: '', role: 'MEMBER' })
+        alert('Member added successfully!')
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Failed to add member')
+      }
+    } catch (error) {
+      console.error('Error adding member:', error)
+      alert('Error adding member')
+    }
+  }
+
+  const handleRemoveMember = async (userId: string, role: string) => {
+    if (!selectedTeam) return
+
+    if (!confirm(`Are you sure you want to remove this ${role.toLowerCase()} from the team?`)) {
+      return
+    }
+
+    try {
+      let token = localStorage.getItem('token')
+      
+      if (!token) {
+        const cookies = document.cookie.split(';')
+        const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('token='))
+        if (tokenCookie) {
+          token = tokenCookie.trim().split('=')[1]
+        }
+      }
+
+      const response = await fetch(`/api/admin/teams/members?teamId=${selectedTeam.id}&userId=${userId}&role=${role}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (response.ok) {
+        await fetchTeams()
+        await fetchStudents()
+        alert('Member removed successfully!')
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Failed to remove member')
+      }
+    } catch (error) {
+      console.error('Error removing member:', error)
+      alert('Error removing member')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -329,7 +419,7 @@ export default function AdminTeams() {
                       <SelectValue placeholder="Select coach" />
                     </SelectTrigger>
                     <SelectContent>
-                      {students.filter((user: any) => user.role === 'ADMIN').map((coach) => (
+                      {students.filter((user: any) => user.role === 'COACH').map((coach) => (
                         <SelectItem key={coach.id} value={coach.id}>
                           {coach.name} - Coach
                         </SelectItem>
@@ -450,14 +540,23 @@ export default function AdminTeams() {
 
         {/* Team Members Dialog */}
         <Dialog open={isMembersDialogOpen} onOpenChange={setIsMembersDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                {selectedTeam?.name} - Team Members
-              </DialogTitle>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  <DialogTitle>{selectedTeam?.name} - Team Members</DialogTitle>
+                </div>
+                <Button 
+                  onClick={() => setIsAddMemberDialogOpen(true)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Add Member
+                </Button>
+              </div>
               <DialogDescription>
-                View all members of the {selectedTeam?.name} team
+                View and manage all members of the {selectedTeam?.name} team
               </DialogDescription>
             </DialogHeader>
             
@@ -474,15 +573,24 @@ export default function AdminTeams() {
 
                 {selectedTeam.coach && (
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-blue-600">C</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-blue-600">C</span>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-blue-900">Team Coach</p>
+                          <p className="text-sm text-blue-700">{selectedTeam.coach.name}</p>
+                          <p className="text-xs text-blue-600">{selectedTeam.coach.email}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-blue-900">Team Coach</p>
-                        <p className="text-sm text-blue-700">{selectedTeam.coach.name}</p>
-                        <p className="text-xs text-blue-600">{selectedTeam.coach.email}</p>
-                      </div>
+                      <Button 
+                        variant="destructive" 
+                        size="sm"
+                        onClick={() => handleRemoveMember(selectedTeam.coach!.id, 'COACH')}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -502,9 +610,18 @@ export default function AdminTeams() {
                             <p className="text-sm text-gray-600">{member.email}</p>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-blue-600">ID: {member.studentID}</p>
-                          <p className="text-xs text-gray-500">{member.department}</p>
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-blue-600">ID: {member.studentID}</p>
+                            <p className="text-xs text-gray-500">{member.department}</p>
+                          </div>
+                          <Button 
+                            variant="destructive" 
+                            size="sm"
+                            onClick={() => handleRemoveMember(member.id, 'MEMBER')}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
                     ))}
@@ -518,6 +635,64 @@ export default function AdminTeams() {
                 )}
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Member Dialog */}
+        <Dialog open={isAddMemberDialogOpen} onOpenChange={setIsAddMemberDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Add Team Member</DialogTitle>
+              <DialogDescription>
+                Add a new member to the {selectedTeam?.name} team
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="user">Select User *</Label>
+                <Select value={addMemberForm.userId} onValueChange={(value) => setAddMemberForm({ ...addMemberForm, userId: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a user" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {students
+                      .filter((user: any) => 
+                        user.role === 'STUDENT' || user.role === 'COACH'
+                      )
+                      .filter((user: any) => 
+                        !selectedTeam?.members.some((member: any) => member.id === user.id) &&
+                        selectedTeam?.coach?.id !== user.id
+                      )
+                      .map((user) => (
+                        <SelectItem key={user.id} value={user.id}>
+                          {user.name} {user.studentID ? `(${user.studentID})` : ''} - {user.role}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="role">Role *</Label>
+                <Select value={addMemberForm.role} onValueChange={(value) => setAddMemberForm({ ...addMemberForm, role: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="MEMBER">Team Member</SelectItem>
+                    <SelectItem value="CAPTAIN">Team Captain</SelectItem>
+                    <SelectItem value="COACH">Team Coach</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddMemberDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddMember}>
+                Add Member
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

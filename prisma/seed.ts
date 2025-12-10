@@ -62,6 +62,18 @@ async function main() {
     },
   })
 
+  // Coach user
+  const coachPassword = await hashPassword('coach123')
+  const coach1 = await prisma.user.create({
+    data: {
+      name: 'Coach Ali',
+      email: 'coach.ali@numl.edu.pk',
+      password: coachPassword,
+      role: 'COACH',
+      department: 'BS Computer Science',
+    },
+  })
+
   console.log('🏆 Creating teams...')
 
   // Create teams
@@ -115,6 +127,12 @@ async function main() {
   await prisma.user.update({
     where: { id: student3.id },
     data: { teamID: basketballTeam.id },
+  })
+
+  // Assign coach to cricket team
+  await prisma.team.update({
+    where: { id: cricketTeam.id },
+    data: { coachId: coach1.id },
   })
 
   console.log('📅 Creating events...')
@@ -285,6 +303,9 @@ async function main() {
   console.log('🔑 Admin Account:')
   console.log('   Email: admin@numl.edu.pk')
   console.log('   Password: admin123')
+  console.log('\n👨 Coach Account:')
+  console.log('   Email: coach.ali@numl.edu.pk')
+  console.log('   Password: coach123')
   console.log('\n🔑 Student Accounts:')
   console.log('   Email: ahmed.khan@numl.edu.pk')
   console.log('   Password: student123')
@@ -293,7 +314,7 @@ async function main() {
   console.log('   Email: muhammad.ali@numl.edu.pk')
   console.log('   Password: student123')
   console.log('\n📊 Summary:')
-  console.log(`   Users: 4 (1 Admin, 3 Students)`)
+  console.log(`   Users: 5 (1 Admin, 1 Coach, 3 Students)`)
   console.log(`   Teams: 4 (Cricket, Football, Basketball, Badminton)`)
   console.log(`   Events: 10 (5 Tournaments, 3 Matches, 1 Training, 1 Multi-Sport)`)
   console.log(`   Posts: 3 (Admin announcements only)`)

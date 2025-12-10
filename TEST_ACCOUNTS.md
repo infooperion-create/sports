@@ -15,6 +15,14 @@ The database has been seeded with test data. You can now log in and explore the 
 - **Role**: Admin
 - **Features**: User management, event management, team oversight
 
+### Coach Account
+
+#### Coach 1 - Cricket Team Coach
+- **Email**: `coach.ali@numl.edu.pk`
+- **Password**: `coach123`
+- **Role**: Coach
+- **Team**: NUML Cricket Club (as coach)
+
 ### Student Accounts
 
 #### Student 1 - Cricket Team Member
@@ -62,6 +70,7 @@ The database has been seeded with test data. You can now log in and explore the 
 2. **Sign in** with any of the accounts above
 3. **Explore** the dashboard based on role:
    - **Admin**: See management options and oversight features
+   - **Coach**: See team management and coaching features
    - **Student**: See team information and upcoming events
 
 ## 🔧 Reset Database

@@ -3,12 +3,13 @@
 import { usePathname } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Home, Users, Calendar, Trophy, MessageSquare, Settings, LogOut, Plus, UserPlus, Megaphone } from 'lucide-react'
+import { Home, Users, Calendar, Trophy, MessageSquare, Settings, LogOut, Plus, UserPlus, Megaphone, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 
 const menuItems = [
   { icon: Home, label: 'Dashboard', href: '/admin/dashboard' },
   { icon: Users, label: 'Students', href: '/admin/students' },
+  { icon: GraduationCap, label: 'Coaches', href: '/admin/coaches' },
   { icon: Users, label: 'Teams', href: '/admin/teams' },
   { icon: Calendar, label: 'Events', href: '/admin/events' },
   { icon: MessageSquare, label: 'Posts', href: '/admin/posts' },
