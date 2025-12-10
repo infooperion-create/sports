@@ -194,6 +194,7 @@ export default function StudentTeams() {
       studentId={studentData?.studentID}
       teamName={studentData?.team?.name}
       onLogout={handleLogout}
+      userData={studentData}
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">

@@ -22,6 +22,21 @@ model User {
   studentID String?  @unique
   department String?  // BS English, BS Computer Science, etc.
   teamID    String?
+  
+  // Profile completion fields
+  profileCompleted Boolean @default(false)
+  dateOfBirth DateTime?
+  phoneNumber String?
+  address String?
+  emergencyContact String?
+  medicalConditions String?
+  sportsInterests String? // JSON array of sports
+  skillLevel String? // BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
+  preferredPosition String? // For team sports
+  experience String? // Years of experience
+  achievements String? // Sports achievements
+  profileImage String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

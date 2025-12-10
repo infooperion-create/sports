@@ -51,7 +51,8 @@ export default function SignupPage() {
           email: formData.email,
           password: formData.password,
           role: formData.role,
-          studentID: formData.role === 'STUDENT' ? formData.studentID : undefined
+          studentID: formData.role === 'STUDENT' ? formData.studentID : undefined,
+          department: formData.role === 'STUDENT' ? formData.department : undefined
         }),
       })
 

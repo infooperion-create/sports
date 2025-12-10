@@ -3,6 +3,7 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Sidebar } from './Sidebar'
+import ProfileCompletionAlert from './ProfileCompletionAlert'
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -11,6 +12,7 @@ interface DashboardLayoutProps {
   studentId?: string
   teamName?: string
   onLogout?: () => void
+  userData?: any
 }
 
 function getPageTitle(pathname: string, userType: 'student' | 'admin'): string {
@@ -44,7 +46,8 @@ export function DashboardLayout({
   userName, 
   studentId, 
   teamName, 
-  onLogout 
+  onLogout,
+  userData
 }: DashboardLayoutProps) {
   const pathname = usePathname()
   const router = useRouter()
@@ -129,6 +132,11 @@ export function DashboardLayout({
       
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
+        {/* Profile Completion Alert - only for students */}
+        {userType === 'student' && userData && (
+          <ProfileCompletionAlert user={userData} />
+        )}
+        
         {/* Page Header */}
         <div className="bg-white border-b px-6 py-4 sticky top-0 z-10">
           <div className="max-w-7xl mx-auto">

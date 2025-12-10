@@ -145,6 +145,7 @@ export default function StudentFeed() {
       studentId={studentData?.studentID}
       teamName={studentData?.team?.name}
       onLogout={handleLogout}
+      userData={studentData}
     >
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">

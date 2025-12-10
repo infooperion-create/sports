@@ -7,10 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { User, Bell, Shield, Palette, HelpCircle } from 'lucide-react'
+import { User, Calendar, Phone, Home, AlertTriangle, Trophy, Target, Award, Star, Camera } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 interface StudentData {
@@ -23,6 +22,18 @@ interface StudentData {
     name: string
     sport: string
   }
+  profileCompleted: boolean
+  dateOfBirth?: string
+  phoneNumber?: string
+  address?: string
+  emergencyContact?: string
+  medicalConditions?: string
+  sportsInterests?: string
+  skillLevel?: string
+  preferredPosition?: string
+  experience?: string
+  achievements?: string
+  profileImage?: string
 }
 
 export default function StudentSettings() {
@@ -35,13 +46,17 @@ export default function StudentSettings() {
   // Settings state
   const [formData, setFormData] = useState({
     name: '',
-    email: ''
-  })
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: false,
-    events: true,
-    posts: true
+    email: '',
+    dateOfBirth: '',
+    phoneNumber: '',
+    address: '',
+    emergencyContact: '',
+    medicalConditions: '',
+    sportsInterests: '',
+    skillLevel: '',
+    preferredPosition: '',
+    experience: '',
+    achievements: ''
   })
 
   useEffect(() => {
@@ -74,9 +89,31 @@ export default function StudentSettings() {
       if (response.ok) {
         const data = await response.json()
         setStudentData(data.student)
+        
+        // Parse sports interests if it's a JSON string
+        let sportsInterests = ''
+        if (data.student.sportsInterests) {
+          try {
+            const parsed = JSON.parse(data.student.sportsInterests)
+            sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : data.student.sportsInterests
+          } catch {
+            sportsInterests = data.student.sportsInterests
+          }
+        }
+        
         setFormData({
           name: data.student.name,
-          email: data.student.email
+          email: data.student.email,
+          dateOfBirth: data.student.dateOfBirth ? new Date(data.student.dateOfBirth).toISOString().split('T')[0] : '',
+          phoneNumber: data.student.phoneNumber || '',
+          address: data.student.address || '',
+          emergencyContact: data.student.emergencyContact || '',
+          medicalConditions: data.student.medicalConditions || '',
+          sportsInterests: sportsInterests,
+          skillLevel: data.student.skillLevel || '',
+          preferredPosition: data.student.preferredPosition || '',
+          experience: data.student.experience || '',
+          achievements: data.student.achievements || ''
         })
       } else {
         router.push('/login')
@@ -93,6 +130,28 @@ export default function StudentSettings() {
     router.push('/')
   }
 
+  const calculateProfileCompletion = () => {
+    const fields = [
+      'dateOfBirth',
+      'phoneNumber',
+      'address',
+      'emergencyContact',
+      'medicalConditions',
+      'sportsInterests',
+      'skillLevel',
+      'preferredPosition',
+      'experience',
+      'achievements'
+    ]
+
+    const completedFields = fields.filter(field => 
+      formData[field as keyof typeof formData] && 
+      formData[field as keyof typeof formData] !== ''
+    )
+
+    return Math.round((completedFields.length / fields.length) * 100)
+  }
+
   const handleSaveProfile = async () => {
     setSaving(true)
     try {
@@ -105,13 +164,26 @@ export default function StudentSettings() {
         }
       }
 
+      // Parse sports interests into JSON array
+      let sportsInterestsJson = ''
+      if (formData.sportsInterests) {
+        const sportsArray = formData.sportsInterests.split(',').map(s => s.trim()).filter(s => s)
+        sportsInterestsJson = JSON.stringify(sportsArray)
+      }
+
+      const profileData = {
+        ...formData,
+        sportsInterests: sportsInterestsJson,
+        profileCompleted: calculateProfileCompletion() >= 80
+      }
+
       const response = await fetch('/api/student/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(profileData)
       })
 
       if (response.ok) {
@@ -119,6 +191,9 @@ export default function StudentSettings() {
           title: "Profile Updated",
           description: "Your profile has been successfully updated.",
         })
+        
+        // Refresh student data
+        await fetchStudentData()
       } else {
         toast({
           title: "Error",
@@ -149,6 +224,8 @@ export default function StudentSettings() {
     return null
   }
 
+  const completionPercentage = calculateProfileCompletion()
+
   return (
     <DashboardLayout
       userType="student"
@@ -156,17 +233,58 @@ export default function StudentSettings() {
       studentId={studentData.studentID}
       teamName={studentData.team?.name}
       onLogout={handleLogout}
+      userData={studentData}
     >
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Profile Settings */}
+        {/* Profile Completion Progress */}
+        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Trophy className="h-5 w-5 text-blue-600" />
+              <span>Profile Completion</span>
+            </CardTitle>
+            <CardDescription>
+              Complete your profile to get personalized recommendations and better team matching
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Profile Strength</span>
+                <span className="text-sm font-bold">{completionPercentage}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div 
+                  className="bg-blue-600 h-3 rounded-full transition-all duration-300" 
+                  style={{ width: `${completionPercentage}%` }}
+                ></div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-600">
+                  {completionPercentage < 50 ? 'Just getting started!' : 
+                   completionPercentage < 80 ? 'Almost there!' : 
+                   'Excellent! Your profile is complete.'}
+                </span>
+                {completionPercentage >= 80 && (
+                  <Badge className="bg-green-100 text-green-800">
+                    <Star className="w-3 h-3 mr-1" />
+                    Complete
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Basic Information */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <User className="h-5 w-5" />
-              <span>Profile Information</span>
+              <span>Basic Information</span>
             </CardTitle>
             <CardDescription>
-              Update your personal information and contact details
+              Update your personal information
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -193,126 +311,214 @@ export default function StudentSettings() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label>Student ID</Label>
+                <Label htmlFor="studentID">Student ID</Label>
                 <Input value={studentData.studentID} disabled className="mt-1 bg-gray-50" />
               </div>
               <div>
-                <Label>Team</Label>
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <Input
+                  id="dateOfBirth"
+                  type="date"
+                  value={formData.dateOfBirth}
+                  onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Contact Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Phone className="h-5 w-5" />
+              <span>Contact Information</span>
+            </CardTitle>
+            <CardDescription>
+              Your contact details for team communication
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="phoneNumber">Phone Number</Label>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  placeholder="Your phone number"
+                  value={formData.phoneNumber}
+                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="emergencyContact">Emergency Contact</Label>
+                <Input
+                  id="emergencyContact"
+                  placeholder="Emergency contact number"
+                  value={formData.emergencyContact}
+                  onChange={(e) => setFormData({ ...formData, emergencyContact: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                placeholder="Your address"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="mt-1"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Sports Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Target className="h-5 w-5" />
+              <span>Sports Profile</span>
+            </CardTitle>
+            <CardDescription>
+              Tell us about your sports interests and experience
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="sportsInterests">Sports Interests</Label>
+              <Input
+                id="sportsInterests"
+                placeholder="e.g., Cricket, Football, Basketball, Tennis"
+                value={formData.sportsInterests}
+                onChange={(e) => setFormData({ ...formData, sportsInterests: e.target.value })}
+                className="mt-1"
+              />
+              <p className="text-xs text-gray-600 mt-1">Separate multiple sports with commas</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="skillLevel">Skill Level</Label>
+                <select
+                  id="skillLevel"
+                  value={formData.skillLevel}
+                  onChange={(e) => setFormData({ ...formData, skillLevel: e.target.value })}
+                  className="w-full px-3 py-2 border border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mt-1"
+                >
+                  <option value="">Select your skill level</option>
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="ADVANCED">Advanced</option>
+                  <option value="EXPERT">Expert</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="preferredPosition">Preferred Position</Label>
+                <Input
+                  id="preferredPosition"
+                  placeholder="e.g., Captain, Forward, Goalkeeper"
+                  value={formData.preferredPosition}
+                  onChange={(e) => setFormData({ ...formData, preferredPosition: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="experience">Experience</Label>
+              <Input
+                id="experience"
+                placeholder="e.g., 2 years of competitive cricket"
+                value={formData.experience}
+                onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="achievements">Achievements</Label>
+              <textarea
+                id="achievements"
+                placeholder="Tell us about your sports achievements and awards"
+                value={formData.achievements}
+                onChange={(e) => setFormData({ ...formData, achievements: e.target.value })}
+                className="mt-1 w-full px-3 py-2 border border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={3}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Medical Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <AlertTriangle className="h-5 w-5" />
+              <span>Medical Information</span>
+            </CardTitle>
+            <CardDescription>
+              Any medical conditions we should be aware of for your safety
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div>
+              <Label htmlFor="medicalConditions">Medical Conditions</Label>
+              <textarea
+                id="medicalConditions"
+                placeholder="Any allergies, medical conditions, or injuries we should know about"
+                value={formData.medicalConditions}
+                onChange={(e) => setFormData({ ...formData, medicalConditions: e.target.value })}
+                className="mt-1 w-full px-3 py-2 border border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={3}
+              />
+              <p className="text-xs text-gray-600 mt-1">This information is kept confidential and is only used for safety purposes</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Team Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Award className="h-5 w-5" />
+              <span>Team Information</span>
+            </CardTitle>
+            <CardDescription>
+              Your current team status
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label>Current Team</Label>
                 <Input 
                   value={studentData.team?.name || 'No team assigned'} 
                   disabled 
                   className="mt-1 bg-gray-50" 
                 />
               </div>
-            </div>
-            <Button onClick={handleSaveProfile} disabled={saving} className="mt-4">
-              {saving ? 'Saving...' : 'Save Changes'}
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Notification Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Bell className="h-5 w-5" />
-              <span>Notifications</span>
-            </CardTitle>
-            <CardDescription>
-              Manage how you receive notifications
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Email Notifications</p>
-                <p className="text-sm text-gray-600">Receive updates via email</p>
+                <Label>Sport</Label>
+                <Input 
+                  value={studentData.team?.sport || 'N/A'} 
+                  disabled 
+                  className="mt-1 bg-gray-50" 
+                />
               </div>
-              <Switch
-                checked={notifications.email}
-                onCheckedChange={(checked) => setNotifications({ ...notifications, email: checked })}
-              />
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Push Notifications</p>
-                <p className="text-sm text-gray-600">Receive browser push notifications</p>
-              </div>
-              <Switch
-                checked={notifications.push}
-                onCheckedChange={(checked) => setNotifications({ ...notifications, push: checked })}
-              />
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Event Reminders</p>
-                <p className="text-sm text-gray-600">Get notified about upcoming events</p>
-              </div>
-              <Switch
-                checked={notifications.events}
-                onCheckedChange={(checked) => setNotifications({ ...notifications, events: checked })}
-              />
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">New Posts</p>
-                <p className="text-sm text-gray-600">Get notified when someone posts</p>
-              </div>
-              <Switch
-                checked={notifications.posts}
-                onCheckedChange={(checked) => setNotifications({ ...notifications, posts: checked })}
-              />
             </div>
           </CardContent>
         </Card>
 
-        {/* Security Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Shield className="h-5 w-5" />
-              <span>Security</span>
-            </CardTitle>
-            <CardDescription>
-              Manage your account security
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button variant="outline" className="w-full justify-start">
-              Change Password
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Enable Two-Factor Authentication
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Help & Support */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <HelpCircle className="h-5 w-5" />
-              <span>Help & Support</span>
-            </CardTitle>
-            <CardDescription>
-              Get help and support
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button variant="outline" className="w-full justify-start">
-              Contact Support
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              FAQ
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Report an Issue
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Save Button */}
+        <div className="flex justify-end space-x-4">
+          <Button variant="outline" onClick={() => router.push('/student/dashboard')}>
+            Cancel
+          </Button>
+          <Button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700">
+            {saving ? 'Saving...' : 'Save Profile'}
+          </Button>
+        </div>
       </div>
     </DashboardLayout>
   )

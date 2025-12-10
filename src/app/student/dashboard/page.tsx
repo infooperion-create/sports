@@ -130,6 +130,7 @@ export default function StudentDashboard() {
       studentId={data.student.studentID}
       teamName={data.student.team?.name}
       onLogout={handleLogout}
+      userData={data.student}
     >
       {/* Main Content */}
       <div className="max-w-7xl mx-auto space-y-8">
