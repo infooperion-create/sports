@@ -88,7 +88,7 @@ export default function SignupPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1552667466-07770ae110d0?w=800&h=1200&fit=crop")'
+            backgroundImage: 'url("/signup-banner.jpeg")'
           }}
         ></div>
         <div className="absolute inset-0 bg-blue-600 opacity-70"></div>
