@@ -203,20 +203,116 @@ async function main() {
       location: 'Indoor Basketball Court',
     },
     {
-      title: 'Table Tennis Championship',
-      description: 'Individual and team table tennis championship.',
-      date: new Date('2024-04-01T09:00:00Z'),
+      title: 'Spring Sports Festival 2025',
+      description: 'Multi-sport festival featuring cricket, football, basketball, volleyball, and athletics events. Open to all students.',
+      date: new Date('2025-02-10T09:00:00Z'),
+      sport: 'Multi-Sport',
+      type: 'TOURNAMENT',
+      location: 'NUML Sports Complex',
+    },
+    {
+      title: 'Summer Cricket League 2025',
+      description: 'Extended cricket tournament with teams from all departments. League matches followed by knockout stage.',
+      date: new Date('2025-05-15T08:00:00Z'),
+      sport: 'Cricket',
+      type: 'TOURNAMENT',
+      location: 'Main Cricket Ground',
+    },
+    {
+      title: 'Football Cup 2025 - Group Stage',
+      description: 'Group stage matches for the annual football cup. Top teams advance to knockout rounds.',
+      date: new Date('2025-06-01T16:00:00Z'),
+      sport: 'Football',
+      type: 'TOURNAMENT',
+      location: 'Main Football Ground',
+    },
+    {
+      title: 'Basketball Championship 2025',
+      description: 'Inter-department basketball championship with top teams from each department competing.',
+      date: new Date('2025-07-20T14:00:00Z'),
+      sport: 'Basketball',
+      type: 'TOURNAMENT',
+      location: 'Indoor Basketball Court',
+    },
+    {
+      title: 'Athletics Meet 2025',
+      description: 'Annual track and field competition with 100m, 200m, 400m, 800m, relay races, and field events.',
+      date: new Date('2025-08-10T08:00:00Z'),
+      sport: 'Athletics',
+      type: 'TOURNAMENT',
+      location: 'Athletics Track',
+    },
+    {
+      title: 'Volleyball Tournament 2025',
+      description: 'Beach volleyball tournament with teams from all departments. Fun and competitive event.',
+      date: new Date('2025-09-05T09:00:00Z'),
+      sport: 'Volleyball',
+      type: 'TOURNAMENT',
+      location: 'Beach Volleyball Court',
+    },
+    {
+      title: 'Table Tennis Open 2025',
+      description: 'Open table tennis tournament for singles and doubles categories. All skill levels welcome.',
+      date: new Date('2025-10-15T10:00:00Z'),
       sport: 'Table Tennis',
       type: 'TOURNAMENT',
       location: 'Table Tennis Hall',
     },
     {
-      title: 'Athletics Meet',
-      description: 'Track and field events including 100m, 200m, 400m, long jump, and high jump.',
-      date: new Date('2024-04-05T08:00:00Z'),
-      sport: 'Athletics',
+      title: 'Hockey Championship 2025',
+      description: 'Inter-department hockey championship with knockout format. Top hockey teams compete for the title.',
+      date: new Date('2025-11-20T14:00:00Z'),
+      sport: 'Hockey',
       type: 'TOURNAMENT',
-      location: 'Athletics Track',
+      location: 'Hockey Field',
+    },
+    {
+      title: 'Badminton Competition 2025',
+      description: 'Annual badminton competition with singles and doubles events. Open to all players.',
+      date: new Date('2025-12-01T09:00:00Z'),
+      sport: 'Badminton',
+      type: 'TOURNAMENT',
+      location: 'Indoor Badminton Court',
+    },
+    {
+      title: 'Swimming Gala 2025',
+      description: 'Annual swimming competition with freestyle, backstroke, breaststroke, and butterfly events.',
+      date: new Date('2025-12-15T10:00:00Z'),
+      sport: 'Swimming',
+      type: 'TOURNAMENT',
+      location: 'Swimming Pool',
+    },
+    {
+      title: 'Chess Masters 2026',
+      description: 'Annual chess tournament for players of all skill levels. Individual and team events.',
+      date: new Date('2026-01-10T09:00:00Z'),
+      sport: 'Chess',
+      type: 'TOURNAMENT',
+      location: 'Chess Hall',
+    },
+    {
+      title: 'Tennis Open 2026',
+      description: 'Open tennis tournament with singles and doubles categories. Professional and amateur divisions.',
+      date: new Date('2026-02-15T14:00:00Z'),
+      sport: 'Tennis',
+      type: 'TOURNAMENT',
+      location: 'Tennis Courts',
+    },
+    {
+      title: 'Spring Football League 2026',
+      description: 'Departmental football league with weekly matches leading to championship playoffs.',
+      date: new Date('2026-03-01T16:00:00Z'),
+      sport: 'Football',
+      type: 'TOURNAMENT',
+      location: 'Main Football Ground',
+    },
+    {
+      title: 'Cricket Season 2026',
+      description: 'Extended cricket season with multiple tournaments and regular matches throughout the year.',
+      date: new Date('2026-04-10T08:00:00Z'),
+      sport: 'Cricket',
+      type: 'TOURNAMENT',
+      location: 'Cricket Ground',
     }
   ]
 
@@ -279,7 +375,7 @@ async function main() {
   console.log('\n📊 Summary:')
   console.log(`   Users: ${11 + teamMembers.length} (1 Admin, 1 Coach, 1 Captain, ${teamMembers.length} Team Members)`)
   console.log(`   Teams: ${createdTeams.length} (Multiple sports across 8 departments)`)
-  console.log(`   Events: 5 (Tournaments and championships)`)
+  console.log(`   Events: ${events.length} (Upcoming tournaments and championships from 2025-2026)`)
   console.log(`   Posts: 4 (Admin announcements)`)
   console.log('\n🏫 Department-Sports Structure:')
   departments.forEach(dept => {

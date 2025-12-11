@@ -18,7 +18,7 @@ export default function EventsPage() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/pakistani-cricket-boys.jpg"
+            src="/pakistani-cricket-boys.jpeg"
             alt="NUML Sports Events"
             className="w-full h-full object-cover"
           />

@@ -77,7 +77,7 @@ export default function RecentEvents() {
         return
       }
 
-      const response = await fetch('/api/coach/recent-events', {
+      const response = await fetch('/api/student/recent-events', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -254,7 +254,7 @@ export default function RecentEvents() {
             <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-600 mb-2">No Recent Events</h3>
             <p className="text-gray-500 mb-4">Check back later for new events and activities</p>
-            <Link href="/student/upcoming-events">
+            <Link href="/coach/upcoming-events">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 View All Events
               </Button>
