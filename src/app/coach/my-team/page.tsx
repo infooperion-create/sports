@@ -184,22 +184,23 @@ export default function MyTeam() {
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">No Team Assigned</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                You haven't been assigned to any team yet. Contact your sports administrator to get assigned to a team and start participating in sports activities.
+                You haven't been assigned to any team yet. As a coach, you can request to lead a team or contact the sports administrator to get assigned to a team and start coaching activities.
               </p>
               <div className="space-y-4">
-                <Card className="bg-blue-50 border-blue-200">
+                <Card className="bg-green-50 border-green-200">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-blue-900 mb-2">How to Join a Team</h3>
-                    <ul className="text-sm text-blue-800 space-y-2 text-left">
+                    <h3 className="font-semibold text-green-900 mb-2">How to Get a Team Assignment</h3>
+                    <ul className="text-sm text-green-800 space-y-2 text-left">
                       <li>• Contact your sports department administrator</li>
-                      <li>• Request team assignment based on your sport preference</li>
-                      <li>• Complete any required registration forms</li>
-                      <li>• Attend team meetings and practice sessions</li>
+                      <li>• Request team assignment based on your sport expertise</li>
+                      <li>• Provide coaching credentials and experience</li>
+                      <li>• Complete coach registration and onboarding</li>
+                      <li>• Attend coach meetings and training sessions</li>
                     </ul>
                   </CardContent>
                 </Card>
-                <Link href="/student/events">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Link href="/coach/events">
+                  <Button className="bg-green-600 hover:bg-green-700 text-white">
                     Browse Available Events
                   </Button>
                 </Link>

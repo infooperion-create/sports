@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { Users, Plus, Crown, LogOut, MessageSquare } from 'lucide-react'
+import { Users, Plus, Crown, LogOut, Mail, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
 interface Team {
@@ -29,15 +29,10 @@ export default function StudentTeams() {
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [showContactForm, setShowContactForm] = useState(false)
   const [studentData, setStudentData] = useState<any>(null)
   const [formData, setFormData] = useState({
     name: '',
     sport: ''
-  })
-  const [contactForm, setContactForm] = useState({
-    subject: '',
-    message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
@@ -45,6 +40,13 @@ export default function StudentTeams() {
   useEffect(() => {
     fetchStudentData()
     fetchTeams()
+    
+    // Add a timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   const fetchStudentData = async () => {
@@ -61,6 +63,7 @@ export default function StudentTeams() {
       
       if (!token) {
         router.push('/login')
+        setLoading(false)
         return
       }
 
@@ -73,9 +76,13 @@ export default function StudentTeams() {
       if (response.ok) {
         const data = await response.json()
         setStudentData(data.student)
+      } else {
+        router.push('/login')
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error fetching student data:', error)
+      setLoading(false)
     }
   }
 
@@ -162,44 +169,34 @@ export default function StudentTeams() {
     }
   }
 
-  const handleContactAdmin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const handleEmailAdmin = () => {
+    const adminEmail = 'touqeer@numl.edu.pk'
+    const subject = encodeURIComponent('Request to Join Sports Team')
+    const body = encodeURIComponent(`Dear Mr. Touqeer,
 
-    try {
-      const token = localStorage.getItem('token')
-      const response = await fetch('/api/student/contact-admin', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...contactForm,
-          studentName: studentData?.name,
-          studentEmail: studentData?.email,
-          studentID: studentData?.studentID
-        })
-      })
+I am ${studentData?.name} (Student ID: ${studentData?.studentID}) from ${studentData?.department}.
 
-      if (response.ok) {
-        resetContactForm()
-        showToast('Message sent to admin successfully!')
-      } else {
-        const errorData = await response.json()
-        showToast(errorData.error || 'Error sending message', 'error')
-      }
-    } catch (error) {
-      console.error('Error contacting admin:', error)
-      showToast('Error sending message', 'error')
-    } finally {
-      setIsSubmitting(false)
-    }
+I would like to request joining a sports team. I am interested in participating in sports activities and would appreciate your guidance on the available options.
+
+Thank you,
+${studentData?.name}
+${studentData?.email}`)
+    
+    window.open(`mailto:${adminEmail}?subject=${subject}&body=${body}`)
   }
 
-  const resetContactForm = () => {
-    setContactForm({ subject: '', message: '' })
-    setShowContactForm(false)
+  const handleWhatsAppAdmin = () => {
+    const adminPhone = '+923000000000' // You can update this with actual admin number
+    const message = encodeURIComponent(`Dear Mr. Touqeer,
+
+I am ${studentData?.name} (Student ID: ${studentData?.studentID}) from ${studentData?.department}.
+
+I would like to request joining a sports team. I am interested in participating in sports activities and would appreciate your guidance on the available options.
+
+Thank you,
+${studentData?.name}`)
+    
+    window.open(`https://wa.me/${adminPhone}?text=${message}`, '_blank')
   }
 
   const resetForm = () => {
@@ -245,9 +242,13 @@ export default function StudentTeams() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Teams</h1>
           <div className="flex space-x-2">
-            <Button onClick={() => setShowContactForm(true)} variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Contact Admin
+            <Button onClick={handleEmailAdmin} variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+              <Mail className="h-4 w-4 mr-2" />
+              Email Admin
+            </Button>
+            <Button onClick={handleWhatsAppAdmin} variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
+              <MessageCircle className="h-4 w-4 mr-2" />
+              WhatsApp
             </Button>
             <Button onClick={() => setShowCreateForm(true)} className="bg-blue-600 hover:bg-blue-700">
               <Plus className="h-4 w-4 mr-2" />
@@ -255,72 +256,6 @@ export default function StudentTeams() {
             </Button>
           </div>
         </div>
-
-        {/* Contact Admin Modal */}
-        {showContactForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md mx-4">
-              <CardHeader>
-                <CardTitle>Contact Admin</CardTitle>
-                <CardDescription>
-                  Send a message to join a team or ask about sports opportunities
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleContactAdmin} className="space-y-4">
-                  <div className="space-y-2">
-                    <label htmlFor="subject" className="text-sm font-medium">Subject</label>
-                    <input
-                      id="subject"
-                      type="text"
-                      value={contactForm.subject}
-                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                      placeholder="e.g., Request to join Football Team"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium">Message</label>
-                    <textarea
-                      id="message"
-                      value={contactForm.message}
-                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                      placeholder="Tell us about your interest and any relevant experience..."
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div className="text-sm text-gray-500 bg-gray-50 p-3 rounded-md">
-                    <p><strong>Your Info:</strong></p>
-                    <p>Name: {studentData?.name}</p>
-                    <p>ID: {studentData?.studentID}</p>
-                    <p>Email: {studentData?.email}</p>
-                  </div>
-                  <div className="flex justify-end space-x-2">
-                    <Button type="button" variant="outline" onClick={resetContactForm}>
-                      Cancel
-                    </Button>
-                    <Button type="submit" disabled={isSubmitting} className="bg-green-600 hover:bg-green-700">
-                      {isSubmitting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        )}
 
         {/* Create Team Modal */}
         {showCreateForm && (
