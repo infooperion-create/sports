@@ -54,7 +54,7 @@ const coachMenuItems: SidebarItem[] = [
   { icon: Calendar, label: 'Upcoming Events', href: '/coach/upcoming-events' },
   { icon: Trophy, label: 'Recent Events', href: '/coach/recent-events' },
   { icon: Users, label: 'My Team', href: '/coach/my-team' },
-  { icon: TeamIcon, label: 'Teams', href: '/coach/teams' },
+  { icon: TeamIcon, label: 'All Teams', href: '/coach/teams' },
   { icon: Settings, label: 'Settings', href: '/coach/settings' },
 ]
 

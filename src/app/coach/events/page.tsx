@@ -29,15 +29,15 @@ interface Event {
 export default function StudentEvents() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
-  const [studentData, setStudentData] = useState<any>(null)
+  const [coachData, setCoachData] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
     fetchEvents()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       let token = localStorage.getItem('token')
       
@@ -54,7 +54,7 @@ export default function StudentEvents() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -62,7 +62,7 @@ export default function StudentEvents() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setCoachData(data.student)
       }
     } catch (error) {
       console.error('Error fetching student data:', error)
@@ -77,7 +77,7 @@ export default function StudentEvents() {
         return
       }
 
-      const response = await fetch('/api/student/events', {
+      const response = await fetch('/api/coach/events', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -99,7 +99,7 @@ export default function StudentEvents() {
   const handleParticipate = async (eventId: string) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('/api/student/events', {
+      const response = await fetch('/api/coach/events', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -128,7 +128,7 @@ export default function StudentEvents() {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`/api/student/events?id=${eventId}`, {
+      const response = await fetch(`/api/coach/events?id=${eventId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -161,7 +161,7 @@ export default function StudentEvents() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   const getEventBackgroundImage = (sport: string) => {
@@ -190,10 +190,10 @@ export default function StudentEvents() {
 
   return (
     <DashboardLayout
-      userType="student"
-      userName={studentData?.name}
-      studentId={studentData?.studentID}
-      teamName={studentData?.team?.name}
+      userType="coach"
+      userName={coachData?.name}
+      studentId={coachData?.studentID}
+      teamName={coachData?.team?.name}
       onLogout={handleLogout}
     >
       <div className="max-w-7xl mx-auto">

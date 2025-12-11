@@ -23,15 +23,15 @@ interface Achievement {
 export default function Achievements() {
   const [achievements, setAchievements] = useState<Achievement[]>([])
   const [loading, setLoading] = useState(true)
-  const [studentData, setStudentData] = useState<any>(null)
+  const [coachData, setCoachData] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
     fetchAchievements()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       let token = localStorage.getItem('token')
       
@@ -56,7 +56,7 @@ export default function Achievements() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.coach)
+        setCoachData(data.coach)
       }
     } catch (error) {
       console.error('Error fetching coach data:', error)
@@ -158,7 +158,7 @@ export default function Achievements() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   if (loading) {
@@ -172,8 +172,8 @@ export default function Achievements() {
   return (
     <DashboardLayout
       userType="coach"
-      userName={studentData?.name}
-      teamName={studentData?.team?.name}
+      userName={coachData?.name}
+      teamName={coachData?.team?.name}
       onLogout={handleLogout}
     >
       <div className="max-w-7xl mx-auto">

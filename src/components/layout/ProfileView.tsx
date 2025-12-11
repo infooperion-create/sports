@@ -177,7 +177,7 @@ export default function ProfileView({
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <IdCard className="w-4 h-4" />
-                  <span>{user.studentID ? 'Student ID' : 'User ID'}</span>
+                  <span>{user.studentID ? 'User ID' : 'User ID'}</span>
                 </div>
                 <p className="font-medium">{user.studentID || user.id}</p>
               </div>

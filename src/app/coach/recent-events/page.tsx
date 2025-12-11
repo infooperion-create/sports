@@ -29,15 +29,15 @@ interface Event {
 export default function RecentEvents() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
-  const [studentData, setStudentData] = useState<any>(null)
+  const [coachData, setCoachData] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
     fetchEvents()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       let token = localStorage.getItem('token')
       
@@ -54,7 +54,7 @@ export default function RecentEvents() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -62,7 +62,7 @@ export default function RecentEvents() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setCoachData(data.student)
       }
     } catch (error) {
       console.error('Error fetching student data:', error)
@@ -77,7 +77,7 @@ export default function RecentEvents() {
         return
       }
 
-      const response = await fetch('/api/student/recent-events', {
+      const response = await fetch('/api/coach/recent-events', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -149,7 +149,7 @@ export default function RecentEvents() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   if (loading) {
@@ -162,10 +162,10 @@ export default function RecentEvents() {
 
   return (
     <DashboardLayout
-      userType="student"
-      userName={studentData?.name}
-      studentId={studentData?.studentID}
-      teamName={studentData?.team?.name}
+      userType="coach"
+      userName={coachData?.name}
+      studentId={coachData?.studentID}
+      teamName={coachData?.team?.name}
       onLogout={handleLogout}
     >
       <div className="max-w-7xl mx-auto">

@@ -9,7 +9,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { Users, Calendar, Trophy, Plus, Crown, LogOut } from 'lucide-react'
 import Link from 'next/link'
 
-interface StudentData {
+interface CoachData {
   id: string
   name: string
   email: string
@@ -22,15 +22,15 @@ interface StudentData {
 }
 
 export default function MyTeam() {
-  const [studentData, setStudentData] = useState<StudentData | null>(null)
+  const [coachData, setCoachData] = useState<CoachData | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -38,7 +38,7 @@ export default function MyTeam() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -46,7 +46,7 @@ export default function MyTeam() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setCoachData(data.coach)
       } else {
         router.push('/login')
       }
@@ -60,7 +60,7 @@ export default function MyTeam() {
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-    router.push('/')
+    router.push('/login')
   }
 
   if (loading) {
@@ -71,29 +71,28 @@ export default function MyTeam() {
     )
   }
 
-  if (!studentData) {
+  if (!coachData) {
     return null
   }
 
   return (
     <DashboardLayout
-      userType="student"
-      userName={studentData?.name}
-      studentId={studentData?.studentID}
-      teamName={studentData?.team?.name}
+      userType="coach"
+      userName={coachData?.name}
+      teamName={coachData?.team?.name}
       onLogout={handleLogout}
     >
       <div className="max-w-6xl mx-auto">
-        {studentData.team ? (
+        {coachData.team ? (
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Team Info */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="h-5 w-5 text-yellow-500" />
-                  {studentData.team.name}
+                  {coachData.team.name}
                 </CardTitle>
-                <CardDescription>{studentData.team.sport}</CardDescription>
+                <CardDescription>{coachData.team.sport}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -103,7 +102,7 @@ export default function MyTeam() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium text-gray-900">Sport</p>
-                    <Badge variant="secondary">{studentData.team.sport}</Badge>
+                    <Badge variant="secondary">{coachData.team.sport}</Badge>
                   </div>
                   <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium text-gray-900">Created</p>
@@ -216,19 +215,19 @@ export default function MyTeam() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link href="/student/events">
+              <Link href="/coach/events">
                 <Button variant="outline" className="w-full">
                   <Calendar className="h-4 w-4 mr-2" />
                   View Events
                 </Button>
               </Link>
-              <Link href="/student/feed">
+              <Link href="/coach/feed">
                 <Button variant="outline" className="w-full">
                   <Users className="h-4 w-4 mr-2" />
                   Community Feed
                 </Button>
               </Link>
-              <Link href="/student/dashboard">
+              <Link href="/coach/dashboard">
                 <Button variant="outline" className="w-full">
                   <Trophy className="h-4 w-4 mr-2" />
                   Dashboard

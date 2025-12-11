@@ -46,15 +46,15 @@ interface Post {
 export default function StudentFeed() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
-  const [studentData, setStudentData] = useState<any>(null)
+  const [coachData, setCoachData] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
     fetchPosts()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       let token = localStorage.getItem('token')
       
@@ -71,7 +71,7 @@ export default function StudentFeed() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -79,7 +79,7 @@ export default function StudentFeed() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setCoachData(data.student)
       }
     } catch (error) {
       console.error('Error fetching student data:', error)
@@ -94,7 +94,7 @@ export default function StudentFeed() {
         return
       }
 
-      const response = await fetch('/api/student/feed', {
+      const response = await fetch('/api/coach/feed', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -127,7 +127,7 @@ export default function StudentFeed() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   if (loading) {
@@ -140,12 +140,12 @@ export default function StudentFeed() {
 
   return (
     <DashboardLayout
-      userType="student"
-      userName={studentData?.name}
-      studentId={studentData?.studentID}
-      teamName={studentData?.team?.name}
+      userType="coach"
+      userName={coachData?.name}
+      studentId={coachData?.studentID}
+      teamName={coachData?.team?.name}
       onLogout={handleLogout}
-      userData={studentData}
+      userData={coachData}
     >
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">

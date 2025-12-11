@@ -13,7 +13,7 @@ import ProfileView from '@/components/layout/ProfileView'
 import { User, Calendar, Phone, Home, AlertTriangle, Trophy, Target, Award, Star, Camera } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
-interface StudentData {
+interface CoachData {
   id: string
   name: string
   email: string
@@ -38,8 +38,8 @@ interface StudentData {
   profileImage?: string
 }
 
-export default function StudentSettings() {
-  const [studentData, setStudentData] = useState<StudentData | null>(null)
+export default function CoachSettings() {
+  const [coachData, setCoachData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -63,10 +63,10 @@ export default function StudentSettings() {
   })
 
   useEffect(() => {
-    fetchStudentData()
+    fetchCoachData()
   }, [])
 
-  const fetchStudentData = async () => {
+  const fetchCoachData = async () => {
     try {
       let token = localStorage.getItem('token')
       
@@ -83,7 +83,7 @@ export default function StudentSettings() {
         return
       }
 
-      const response = await fetch('/api/student/dashboard', {
+      const response = await fetch('/api/coach/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -91,32 +91,32 @@ export default function StudentSettings() {
 
       if (response.ok) {
         const data = await response.json()
-        setStudentData(data.student)
+        setCoachData(data.student)
         
         // Parse sports interests if it's a JSON string
         let sportsInterests = ''
-        if (data.student.sportsInterests) {
+        if (data.coach.sportsInterests) {
           try {
-            const parsed = JSON.parse(data.student.sportsInterests)
-            sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : data.student.sportsInterests
+            const parsed = JSON.parse(data.coach.sportsInterests)
+            sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : data.coach.sportsInterests
           } catch {
-            sportsInterests = data.student.sportsInterests
+            sportsInterests = data.coach.sportsInterests
           }
         }
         
         setFormData({
-          name: data.student.name,
-          email: data.student.email,
-          dateOfBirth: data.student.dateOfBirth ? new Date(data.student.dateOfBirth).toISOString().split('T')[0] : '',
-          phoneNumber: data.student.phoneNumber || '',
-          address: data.student.address || '',
-          emergencyContact: data.student.emergencyContact || '',
-          medicalConditions: data.student.medicalConditions || '',
+          name: data.coach.name,
+          email: data.coach.email,
+          dateOfBirth: data.coach.dateOfBirth ? new Date(data.coach.dateOfBirth).toISOString().split('T')[0] : '',
+          phoneNumber: data.coach.phoneNumber || '',
+          address: data.coach.address || '',
+          emergencyContact: data.coach.emergencyContact || '',
+          medicalConditions: data.coach.medicalConditions || '',
           sportsInterests: sportsInterests,
-          skillLevel: data.student.skillLevel || '',
-          preferredPosition: data.student.preferredPosition || '',
-          experience: data.student.experience || '',
-          achievements: data.student.achievements || ''
+          skillLevel: data.coach.skillLevel || '',
+          preferredPosition: data.coach.preferredPosition || '',
+          experience: data.coach.experience || '',
+          achievements: data.coach.achievements || ''
         })
       } else {
         router.push('/login')
@@ -130,7 +130,7 @@ export default function StudentSettings() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   const calculateProfileCompletion = () => {
@@ -180,7 +180,7 @@ export default function StudentSettings() {
         profileCompleted: calculateProfileCompletion() >= 80
       }
 
-      const response = await fetch('/api/student/settings', {
+      const response = await fetch('/api/coach/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function StudentSettings() {
         })
         
         // Refresh student data
-        await fetchStudentData()
+        await fetchCoachData()
         setIsEditing(false)
       } else {
         toast({
@@ -223,30 +223,30 @@ export default function StudentSettings() {
   const handleCancelEdit = () => {
     setIsEditing(false)
     // Reset form data to original values
-    if (studentData) {
+    if (coachData) {
       let sportsInterests = ''
-      if (studentData.sportsInterests) {
+      if (coachData.sportsInterests) {
         try {
-          const parsed = JSON.parse(studentData.sportsInterests)
-          sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : studentData.sportsInterests
+          const parsed = JSON.parse(coachData.sportsInterests)
+          sportsInterests = Array.isArray(parsed) ? parsed.join(', ') : coachData.sportsInterests
         } catch {
-          sportsInterests = studentData.sportsInterests
+          sportsInterests = coachData.sportsInterests
         }
       }
       
       setFormData({
-        name: studentData.name,
-        email: studentData.email,
-        dateOfBirth: studentData.dateOfBirth ? new Date(studentData.dateOfBirth).toISOString().split('T')[0] : '',
-        phoneNumber: studentData.phoneNumber || '',
-        address: studentData.address || '',
-        emergencyContact: studentData.emergencyContact || '',
-        medicalConditions: studentData.medicalConditions || '',
+        name: coachData.name,
+        email: coachData.email,
+        dateOfBirth: coachData.dateOfBirth ? new Date(coachData.dateOfBirth).toISOString().split('T')[0] : '',
+        phoneNumber: coachData.phoneNumber || '',
+        address: coachData.address || '',
+        emergencyContact: coachData.emergencyContact || '',
+        medicalConditions: coachData.medicalConditions || '',
         sportsInterests: sportsInterests,
-        skillLevel: studentData.skillLevel || '',
-        preferredPosition: studentData.preferredPosition || '',
-        experience: studentData.experience || '',
-        achievements: studentData.achievements || ''
+        skillLevel: coachData.skillLevel || '',
+        preferredPosition: coachData.preferredPosition || '',
+        experience: coachData.experience || '',
+        achievements: coachData.achievements || ''
       })
     }
   }
@@ -259,23 +259,22 @@ export default function StudentSettings() {
     )
   }
 
-  if (!studentData) {
+  if (!coachData) {
     return null
   }
 
   // Show profile view if profile is completed and not editing
-  if (studentData.profileCompleted && !isEditing) {
+  if (coachData.profileCompleted && !isEditing) {
     return (
       <DashboardLayout
-        userType="student"
-        userName={studentData.name}
-        studentId={studentData.studentID}
-        teamName={studentData.team?.name}
+        userType="coach"
+        userName={coachData.name}
+        teamName={coachData.team?.name}
         onLogout={handleLogout}
-        userData={studentData}
+        userData={coachData}
       >
         <ProfileView 
-          user={studentData}
+          user={coachData}
           onEdit={handleEditProfile}
           title="My Profile"
         />
@@ -288,12 +287,11 @@ export default function StudentSettings() {
 
   return (
     <DashboardLayout
-      userType="student"
-      userName={studentData.name}
-      studentId={studentData.studentID}
-      teamName={studentData.team?.name}
+      userType="coach"
+      userName={coachData.name}
+      teamName={coachData.team?.name}
       onLogout={handleLogout}
-      userData={studentData}
+      userData={coachData}
     >
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
@@ -397,7 +395,7 @@ export default function StudentSettings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="studentID">Student ID</Label>
-                <Input value={studentData.studentID} disabled className="mt-1 bg-gray-50" />
+                <Input value={coachData.studentID} disabled className="mt-1 bg-gray-50" />
               </div>
               <div>
                 <Label htmlFor="dateOfBirth">Date of Birth</Label>
@@ -578,7 +576,7 @@ export default function StudentSettings() {
               <div>
                 <Label>Current Team</Label>
                 <Input 
-                  value={studentData.team?.name || 'No team assigned'} 
+                  value={coachData.team?.name || 'No team assigned'} 
                   disabled 
                   className="mt-1 bg-gray-50" 
                 />
@@ -586,7 +584,7 @@ export default function StudentSettings() {
               <div>
                 <Label>Sport</Label>
                 <Input 
-                  value={studentData.team?.sport || 'N/A'} 
+                  value={coachData.team?.sport || 'N/A'} 
                   disabled 
                   className="mt-1 bg-gray-50" 
                 />
@@ -598,7 +596,7 @@ export default function StudentSettings() {
         {/* Save Button */}
         {!isEditing && (
           <div className="flex justify-end space-x-4">
-            <Button variant="outline" onClick={() => router.push('/student/dashboard')}>
+            <Button variant="outline" onClick={() => router.push('/coach/dashboard')}>
               Skip for Now
             </Button>
             <Button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700">

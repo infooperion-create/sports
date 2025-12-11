@@ -108,7 +108,7 @@ export default function CoachDashboard() {
   }
 
   const handleLogout = () => {
-    router.push('/')
+    router.push('/login')
   }
 
   if (loading) {
@@ -370,7 +370,7 @@ export default function CoachDashboard() {
                 )}
                 {data.events.length > 3 && (
                   <div className="text-center pt-4">
-                    <Link href="/coach/upcoming-events">
+                    <Link href="/student/upcoming-events">
                       <Badge variant="outline" className="cursor-pointer hover:bg-orange-100 border-orange-300 text-orange-700">
                         View All Events ({data.events.length})
                       </Badge>
