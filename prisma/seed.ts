@@ -3,6 +3,16 @@ import { hashPassword } from '../src/lib/auth'
 
 const prisma = new PrismaClient()
 
+// Helper function to generate 8-character alphanumeric ID
+function generateId(): string {
+  const chars = '0123456789'
+  let result = ''
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return result
+}
+
 async function main() {
   console.log('🌱 Starting database seeding...')
 
@@ -15,317 +25,270 @@ async function main() {
   // Create users
   console.log('👥 Creating users...')
 
-  // Admin user
+  // Admin user - Mr. Touqeer
   const adminPassword = await hashPassword('admin123')
   const admin = await prisma.user.create({
     data: {
-      name: 'Admin User',
-      email: 'admin@numl.edu.pk',
+      name: 'Mr. Touqeer',
+      email: 'touqeer@numl.edu.pk',
       password: adminPassword,
       role: 'ADMIN',
       studentID: null,
     },
   })
 
-  // Student users
-  const studentPassword = await hashPassword('student123')
-  const student1 = await prisma.user.create({
-    data: {
-      name: 'Ahmed Khan',
-      email: 'ahmed.khan@numl.edu.pk',
-      password: studentPassword,
-      role: 'STUDENT',
-      studentID: 'NUML2024001',
-      department: 'BS Computer Science',
-    },
-  })
-
-  const student2 = await prisma.user.create({
-    data: {
-      name: 'Fatima Zahra',
-      email: 'fatima.zahra@numl.edu.pk',
-      password: studentPassword,
-      role: 'STUDENT',
-      studentID: 'NUML2024002',
-      department: 'BS English',
-    },
-  })
-
-  const student3 = await prisma.user.create({
-    data: {
-      name: 'Muhammad Ali',
-      email: 'muhammad.ali@numl.edu.pk',
-      password: studentPassword,
-      role: 'STUDENT',
-      studentID: 'NUML2024003',
-      department: 'BS Business Administration',
-    },
-  })
-
-  // Coach user
+  // Coach user - Ghulam Bahu
   const coachPassword = await hashPassword('coach123')
-  const coach1 = await prisma.user.create({
+  const coach = await prisma.user.create({
     data: {
-      name: 'Coach Ali',
-      email: 'coach.ali@numl.edu.pk',
+      name: 'Ghulam Bahu',
+      email: 'ghulam.bahu@numl.edu.pk',
       password: coachPassword,
       role: 'COACH',
       department: 'BS Computer Science',
     },
   })
 
-  console.log('🏆 Creating teams...')
-
-  // Create teams
-  const cricketTeam = await prisma.team.create({
+  // Captain - Kashif
+  const captainPassword = await hashPassword('captain123')
+  const captain = await prisma.user.create({
     data: {
-      name: 'NUML Cricket Club',
-      sport: 'Cricket',
+      name: 'Kashif',
+      email: 'kashif@numl.edu.pk',
+      password: captainPassword,
+      role: 'STUDENT',
+      studentID: generateId(),
       department: 'BS Computer Science',
-      createdBy: admin.id,
     },
   })
 
-  const footballTeam = await prisma.team.create({
-    data: {
-      name: 'NUML Football Club',
-      sport: 'Football',
-      department: 'BS English',
-      createdBy: admin.id,
+  // Additional team members
+  const teamMembers = []
+  const memberNames = [
+    'Ahmed Khan', 'Fatima Zahra', 'Muhammad Ali', 'Sara Ahmed', 
+    'Umer Farooq', 'Ayesha Khan', 'Bilal Hussain', 'Zainab Ali'
+  ]
+
+  for (let i = 0; i < memberNames.length; i++) {
+    const member = await prisma.user.create({
+      data: {
+        name: memberNames[i],
+        email: `${memberNames[i].toLowerCase().replace(' ', '.')}@numl.edu.pk`,
+        password: await hashPassword('student123'),
+        role: 'STUDENT',
+        studentID: generateId(),
+        department: 'BS Computer Science',
+      },
+    })
+    teamMembers.push(member)
+  }
+
+  console.log('🏆 Creating teams for all departments...')
+
+  // Define departments and their sports
+  const departments = [
+    {
+      name: 'BS Computer Science',
+      sports: ['Football', 'Cricket', 'Basketball', 'Table Tennis', 'Esports']
     },
-  })
-
-  const basketballTeam = await prisma.team.create({
-    data: {
-      name: 'NUML Basketball Club',
-      sport: 'Basketball',
-      department: 'BS Business Administration',
-      createdBy: admin.id,
+    {
+      name: 'BS English',
+      sports: ['Football', 'Cricket', 'Hockey', 'Badminton', 'Chess']
     },
-  })
-
-  const badmintonTeam = await prisma.team.create({
-    data: {
-      name: 'NUML Badminton Club',
-      sport: 'Badminton',
-      department: 'BS Business Administration',
-      createdBy: admin.id,
+    {
+      name: 'BS Business Administration',
+      sports: ['Football', 'Basketball', 'Volleyball', 'Tennis', 'Squash']
     },
-  })
+    {
+      name: 'BS Physics',
+      sports: ['Cricket', 'Hockey', 'Athletics', 'Swimming', 'Table Tennis']
+    },
+    {
+      name: 'BS Chemistry',
+      sports: ['Football', 'Volleyball', 'Badminton', 'Chess', 'Athletics']
+    },
+    {
+      name: 'BS Mathematics',
+      sports: ['Cricket', 'Basketball', 'Chess', 'Table Tennis', 'Esports']
+    },
+    {
+      name: 'BS Economics',
+      sports: ['Football', 'Hockey', 'Tennis', 'Squash', 'Athletics']
+    },
+    {
+      name: 'BS Psychology',
+      sports: ['Basketball', 'Volleyball', 'Badminton', 'Chess', 'Table Tennis']
+    }
+  ]
 
-  // Update students with team assignments
-  await prisma.user.update({
-    where: { id: student1.id },
-    data: { teamID: cricketTeam.id },
-  })
+  const createdTeams = []
 
-  await prisma.user.update({
-    where: { id: student2.id },
-    data: { teamID: footballTeam.id },
-  })
+  // Create teams for each department and sport
+  for (const department of departments) {
+    for (const sport of department.sports) {
+      const team = await prisma.team.create({
+        data: {
+          id: generateId(),
+          name: `${department.name} ${sport} Team`,
+          sport: sport,
+          department: department.name,
+          createdBy: admin.id,
+        },
+      })
+      createdTeams.push(team)
+    }
+  }
 
-  await prisma.user.update({
-    where: { id: student3.id },
-    data: { teamID: basketballTeam.id },
-  })
+  // Assign coach to Football Team (BS Computer Science)
+  const footballTeam = createdTeams.find(team => 
+    team.department === 'BS Computer Science' && team.sport === 'Football'
+  )
+  
+  if (footballTeam) {
+    await prisma.team.update({
+      where: { id: footballTeam.id },
+      data: { coachId: coach.id },
+    })
 
-  // Assign coach to cricket team
-  await prisma.team.update({
-    where: { id: cricketTeam.id },
-    data: { coachId: coach1.id },
-  })
+    // Assign captain and team members to Football Team
+    await prisma.user.update({
+      where: { id: captain.id },
+      data: { teamID: footballTeam.id },
+    })
+
+    for (const member of teamMembers.slice(0, 7)) {
+      await prisma.user.update({
+        where: { id: member.id },
+        data: { teamID: footballTeam.id },
+      })
+    }
+  }
+
+  // Assign some students to other teams
+  for (let i = 0; i < teamMembers.length; i++) {
+    const randomTeam = createdTeams[Math.floor(Math.random() * createdTeams.length)]
+    await prisma.user.update({
+      where: { id: teamMembers[i].id },
+      data: { teamID: randomTeam.id },
+    })
+  }
 
   console.log('📅 Creating events...')
 
-  // Create events
-  const event1 = await prisma.event.create({
-    data: {
-      title: 'Cricket Tournament - Spring 2026',
-      description: 'Annual cricket tournament featuring all university teams. Come and support your favorite team!',
-      date: new Date('2026-03-15T10:00:00Z'),
-      sport: 'Cricket',
-      type: 'TOURNAMENT',
-      location: 'NUML Sports Ground',
-      createdBy: admin.id,
-    },
-  })
-
-  const event2 = await prisma.event.create({
-    data: {
-      title: 'Football Championship',
-      description: 'Inter-department football championship. Registration open for all students.',
-      date: new Date('2026-03-20T14:00:00Z'),
+  // Create events for different sports
+  const events = [
+    {
+      title: 'Inter-Department Football Championship 2024',
+      description: 'Annual football championship featuring all departments. Teams will compete in knockout format.',
+      date: new Date('2024-03-15T10:00:00Z'),
       sport: 'Football',
       type: 'TOURNAMENT',
-      location: 'Main Football Field',
-      createdBy: admin.id,
+      location: 'Main Football Ground',
+      teamAID: footballTeam?.id,
     },
-  })
-
-  const event3 = await prisma.event.create({
-    data: {
+    {
+      title: 'Cricket Premier League',
+      description: 'Cricket tournament with league format. All department teams participate.',
+      date: new Date('2024-03-20T14:00:00Z'),
+      sport: 'Cricket',
+      type: 'TOURNAMENT',
+      location: 'Cricket Ground',
+    },
+    {
       title: 'Basketball 3x3 Tournament',
-      description: 'Fast-paced 3x3 basketball tournament. Teams of 3-4 players can register.',
-      date: new Date('2026-03-25T16:00:00Z'),
+      description: 'Fast-paced basketball tournament with 3-player teams.',
+      date: new Date('2024-03-25T16:00:00Z'),
       sport: 'Basketball',
       type: 'TOURNAMENT',
-      location: 'Indoor Sports Complex',
-      createdBy: admin.id,
+      location: 'Indoor Basketball Court',
     },
-  })
-
-  const event4 = await prisma.event.create({
-    data: {
-      title: 'Cricket vs Football Match',
-      description: 'Friendly match between cricket and football club teams.',
-      date: new Date('2026-04-01T10:00:00Z'),
-      sport: 'Cricket',
-      type: 'MATCH',
-      location: 'Main Sports Ground',
-      teamAID: cricketTeam.id,
-      teamBID: footballTeam.id,
-      status: 'UPCOMING',
-      createdBy: admin.id,
-    },
-  })
-
-  const event5 = await prisma.event.create({
-    data: {
-      title: 'Badminton Singles Final',
-      description: 'Championship final match for badminton singles category.',
-      date: new Date('2026-04-05T09:00:00Z'),
-      sport: 'Badminton',
-      type: 'MATCH',
-      location: 'Indoor Badminton Court',
-      teamAID: badmintonTeam.id,
-      status: 'COMPLETED',
-      scoreA: 21,
-      scoreB: 19,
-      createdBy: admin.id,
-    },
-  })
-
-  // Recent Events (Completed)
-  const recentEvent1 = await prisma.event.create({
-    data: {
-      title: 'Inter-Department Cricket Championship',
-      description: ' thrilling cricket match between Computer Science and Engineering departments. Computer Science won by 3 wickets in a nail-biting finish!',
-      date: new Date('2025-01-15T10:00:00Z'),
-      sport: 'Cricket',
-      type: 'TOURNAMENT',
-      location: 'NUML Sports Ground',
-      status: 'COMPLETED',
-      createdBy: admin.id,
-    },
-  })
-
-  const recentEvent2 = await prisma.event.create({
-    data: {
-      title: 'Basketball Friendly Match',
-      description: 'An exciting basketball match between NUML Basketball Club and visiting team from Punjab University. NUML won 78-72.',
-      date: new Date('2025-01-10T16:00:00Z'),
-      sport: 'Basketball',
-      type: 'MATCH',
-      location: 'Indoor Sports Complex',
-      teamAID: basketballTeam.id,
-      status: 'COMPLETED',
-      scoreA: 78,
-      scoreB: 72,
-      createdBy: admin.id,
-    },
-  })
-
-  const recentEvent3 = await prisma.event.create({
-    data: {
-      title: 'Annual Sports Day 2024',
-      description: 'A grand celebration of sports with multiple events including track and field, volleyball, and tug-of-war. Over 500 students participated.',
-      date: new Date('2024-12-20T09:00:00Z'),
-      sport: 'Multi-Sport',
-      type: 'TOURNAMENT',
-      location: 'Main Sports Ground',
-      status: 'COMPLETED',
-      createdBy: admin.id,
-    },
-  })
-
-  const recentEvent4 = await prisma.event.create({
-    data: {
-      title: 'Football Training Camp',
-      description: 'Week-long intensive training camp for the football team conducted by professional coaches from Pakistan Football Federation.',
-      date: new Date('2024-12-05T08:00:00Z'),
-      sport: 'Football',
-      type: 'PRACTICE',
-      location: 'Football Training Ground',
-      status: 'COMPLETED',
-      createdBy: admin.id,
-    },
-  })
-
-  const recentEvent5 = await prisma.event.create({
-    data: {
-      title: 'Table Tennis Tournament',
-      description: 'Inter-university table tennis tournament with participants from 12 universities. NUML secured 2nd position in team event.',
-      date: new Date('2024-11-28T11:00:00Z'),
+    {
+      title: 'Table Tennis Championship',
+      description: 'Individual and team table tennis championship.',
+      date: new Date('2024-04-01T09:00:00Z'),
       sport: 'Table Tennis',
       type: 'TOURNAMENT',
-      location: 'Indoor Sports Complex',
-      status: 'COMPLETED',
-      createdBy: admin.id,
+      location: 'Table Tennis Hall',
     },
-  })
+    {
+      title: 'Athletics Meet',
+      description: 'Track and field events including 100m, 200m, 400m, long jump, and high jump.',
+      date: new Date('2024-04-05T08:00:00Z'),
+      sport: 'Athletics',
+      type: 'TOURNAMENT',
+      location: 'Athletics Track',
+    }
+  ]
+
+  for (const eventData of events) {
+    await prisma.event.create({
+      data: {
+        ...eventData,
+        createdBy: admin.id,
+      },
+    })
+  }
 
   console.log('📝 Creating posts...')
 
-  // Create posts - only admin posts
+  // Create posts by admin
   await prisma.post.create({
     data: {
       userID: admin.id,
-      content: '🏏 Cricket tournament registration is now open! All interested students can register at the sports office. Last date for registration: March 10, 2024. #Cricket #Tournament',
+      content: '🏆 Sports registrations are now open for all departments! Contact the sports office to join your favorite team. Last date for registration: March 10, 2024. #Sports #Registration',
     },
   })
 
   await prisma.post.create({
     data: {
       userID: admin.id,
-      content: '📢 Important Notice: All sports club presidents are requested to attend a meeting on March 5, 2024 at 2:00 PM in the conference room. Agenda: Annual sports budget and upcoming events.',
+      content: '📢 Important Notice: All team captains are requested to attend a meeting on March 5, 2024 at 2:00 PM in the conference room. Agenda: Tournament schedule and rules discussion.',
     },
   })
 
   await prisma.post.create({
     data: {
       userID: admin.id,
-      content: '🏆 Congratulations to our Badminton team for winning the regional championship! The team showed exceptional skill and sportsmanship. We are proud of your achievement! #Champions #Badminton',
+      content: '⚽ Football practice schedule: Every Monday and Wednesday at 4:00 PM. All team members must attend. For any queries, contact Coach Ghulam Bahu. #Football #Practice',
+    },
+  })
+
+  await prisma.post.create({
+    data: {
+      userID: admin.id,
+      content: '🏏 Cricket trials for new players will be held on March 8, 2024. Interested students should bring their sports kit and register at the sports office. #Cricket #Trials',
     },
   })
 
   console.log('✅ Database seeding completed successfully!')
   console.log('\n📋 Login Credentials:')
   console.log('🔑 Admin Account:')
-  console.log('   Email: admin@numl.edu.pk')
+  console.log('   Name: Mr. Touqeer')
+  console.log('   Email: touqeer@numl.edu.pk')
   console.log('   Password: admin123')
-  console.log('\n👨 Coach Account:')
-  console.log('   Email: coach.ali@numl.edu.pk')
+  console.log('\n👨‍💼 Coach Account:')
+  console.log('   Name: Ghulam Bahu')
+  console.log('   Email: ghulam.bahu@numl.edu.pk')
   console.log('   Password: coach123')
+  console.log('\n👨‍🎓 Captain Account:')
+  console.log('   Name: Kashif')
+  console.log('   Email: kashif@numl.edu.pk')
+  console.log('   Password: captain123')
   console.log('\n🔑 Student Accounts:')
-  console.log('   Email: ahmed.khan@numl.edu.pk')
-  console.log('   Password: student123')
-  console.log('   Email: fatima.zahra@numl.edu.pk')
-  console.log('   Password: student123')
-  console.log('   Email: muhammad.ali@numl.edu.pk')
-  console.log('   Password: student123')
+  console.log('   Password: student123 (for all student accounts)')
   console.log('\n📊 Summary:')
-  console.log(`   Users: 5 (1 Admin, 1 Coach, 3 Students)`)
-  console.log(`   Teams: 4 (Cricket, Football, Basketball, Badminton)`)
-  console.log(`   Events: 10 (5 Tournaments, 3 Matches, 1 Training, 1 Multi-Sport)`)
-  console.log(`   Posts: 3 (Admin announcements only)`)
-  console.log('\n🏫 Team-Department Structure:')
-  console.log('   Cricket Team: BS Computer Science')
-  console.log('   Football Team: BS English')
-  console.log('   Basketball Team: BS Business Administration')
-  console.log('   Badminton Team: BS Business Administration')
-  console.log('\n⚽ Event Types:')
-  console.log('   Tournaments: Cricket, Football, Basketball')
-  console.log('   Matches: Cricket vs Football, Badminton Singles (Completed)')
+  console.log(`   Users: ${11 + teamMembers.length} (1 Admin, 1 Coach, 1 Captain, ${teamMembers.length} Team Members)`)
+  console.log(`   Teams: ${createdTeams.length} (Multiple sports across 8 departments)`)
+  console.log(`   Events: 5 (Tournaments and championships)`)
+  console.log(`   Posts: 4 (Admin announcements)`)
+  console.log('\n🏫 Department-Sports Structure:')
+  departments.forEach(dept => {
+    console.log(`   ${dept.name}: ${dept.sports.join(', ')}`)
+  })
+  console.log('\n⚽ Special Assignments:')
+  console.log('   Football Team (BS Computer Science): Coach - Ghulam Bahu, Captain - Kashif')
+  console.log('   Team IDs: 8-character alphanumeric codes')
+  console.log('   Student IDs: 8-character alphanumeric codes')
 }
 
 main()

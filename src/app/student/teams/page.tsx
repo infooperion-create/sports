@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { Users, Plus, Crown, LogOut } from 'lucide-react'
+import { Users, Plus, Crown, LogOut, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 
 interface Team {
@@ -29,10 +29,15 @@ export default function StudentTeams() {
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [showContactForm, setShowContactForm] = useState(false)
   const [studentData, setStudentData] = useState<any>(null)
   const [formData, setFormData] = useState({
     name: '',
     sport: ''
+  })
+  const [contactForm, setContactForm] = useState({
+    subject: '',
+    message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
@@ -157,6 +162,46 @@ export default function StudentTeams() {
     }
   }
 
+  const handleContactAdmin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch('/api/student/contact-admin', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...contactForm,
+          studentName: studentData?.name,
+          studentEmail: studentData?.email,
+          studentID: studentData?.studentID
+        })
+      })
+
+      if (response.ok) {
+        resetContactForm()
+        showToast('Message sent to admin successfully!')
+      } else {
+        const errorData = await response.json()
+        showToast(errorData.error || 'Error sending message', 'error')
+      }
+    } catch (error) {
+      console.error('Error contacting admin:', error)
+      showToast('Error sending message', 'error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const resetContactForm = () => {
+    setContactForm({ subject: '', message: '' })
+    setShowContactForm(false)
+  }
+
   const resetForm = () => {
     setFormData({ name: '', sport: '' })
     setShowCreateForm(false)
@@ -199,11 +244,83 @@ export default function StudentTeams() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Teams</h1>
-          <Button onClick={() => setShowCreateForm(true)} className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Team
-          </Button>
+          <div className="flex space-x-2">
+            <Button onClick={() => setShowContactForm(true)} variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Contact Admin
+            </Button>
+            <Button onClick={() => setShowCreateForm(true)} className="bg-blue-600 hover:bg-blue-700">
+              <Plus className="h-4 w-4 mr-2" />
+              Create Team
+            </Button>
+          </div>
         </div>
+
+        {/* Contact Admin Modal */}
+        {showContactForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md mx-4">
+              <CardHeader>
+                <CardTitle>Contact Admin</CardTitle>
+                <CardDescription>
+                  Send a message to join a team or ask about sports opportunities
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleContactAdmin} className="space-y-4">
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium">Subject</label>
+                    <input
+                      id="subject"
+                      type="text"
+                      value={contactForm.subject}
+                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                      placeholder="e.g., Request to join Football Team"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">Message</label>
+                    <textarea
+                      id="message"
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                      placeholder="Tell us about your interest and any relevant experience..."
+                      rows={4}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div className="text-sm text-gray-500 bg-gray-50 p-3 rounded-md">
+                    <p><strong>Your Info:</strong></p>
+                    <p>Name: {studentData?.name}</p>
+                    <p>ID: {studentData?.studentID}</p>
+                    <p>Email: {studentData?.email}</p>
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button type="button" variant="outline" onClick={resetContactForm}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting} className="bg-green-600 hover:bg-green-700">
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Send Message
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Create Team Modal */}
         {showCreateForm && (
