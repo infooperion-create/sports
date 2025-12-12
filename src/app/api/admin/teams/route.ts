@@ -55,7 +55,9 @@ export async function GET(request: NextRequest) {
             name: true,
             email: true,
             studentID: true,
-            department: true
+            department: true,
+            teamID: true,
+            role: true
           }
         },
         _count: {
@@ -65,7 +67,17 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     })
 
-    return NextResponse.json(teams)
+    // Add captain information to each team
+    const teamsWithCaptain = teams.map(team => {
+      const captain = team.members.find(member => member.teamID === team.id)
+      return {
+        ...team,
+        captainId: captain?.id || null,
+        captain: captain || null
+      }
+    })
+
+    return NextResponse.json(teamsWithCaptain)
   } catch (error) {
     console.error('Error fetching teams:', error)
     return NextResponse.json(

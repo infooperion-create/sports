@@ -28,12 +28,23 @@ interface Team {
     name: string
     email: string
   }
+  captain?: {
+    id: string
+    name: string
+    email: string
+    studentID: string
+    department: string
+    teamID: string
+  }
+  captainId?: string | null
   members: Array<{
     id: string
     name: string
     email: string
     studentID: string
     department: string
+    teamID?: string
+    role?: string
   }>
   _count: {
     members: number
