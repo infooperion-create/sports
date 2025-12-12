@@ -20,7 +20,7 @@ export default function AchievementsPage() {
               alt="NUML Sports Team"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-indigo-900/90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-800/40 to-green-600/60 opacity-80"></div>
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="text-center">
@@ -42,7 +42,7 @@ export default function AchievementsPage() {
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-yellow-300">10+</div>
-                  <div className="text-blue-100">HEC Championships</div>
+                  <div className="text-blue-100">NUML Championships</div>
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-yellow-300">National</div>
@@ -63,13 +63,13 @@ export default function AchievementsPage() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8 mb-12">
-              {/* HEC Intervarsity Volleyball Championship - Featured Large */}
+              {/* NUML Intervarsity Volleyball Championship - Featured Large */}
               <div className="relative group cursor-pointer">
                 <div className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
                   <div className="aspect-[4/3] relative">
                     <img
-                      src="/achievement2.jpeg"
-                      alt="HEC Volleyball Championship Team"
+                      src="/achievement3.jpeg"
+                      alt="NUML Volleyball Championship Team"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
@@ -86,9 +86,9 @@ export default function AchievementsPage() {
                         </div>
                         <Badge className="bg-green-600 text-white border-0">Volleyball</Badge>
                       </div>
-                      <h3 className="text-3xl font-bold mb-3">HEC Zone-E Champions</h3>
+                      <h3 className="text-3xl font-bold mb-3">NUML Champions</h3>
                       <p className="text-lg text-gray-200 mb-4">
-                        Men's team wins HEC Intervarsity Volleyball Championship Zone-E for 2024-25 session
+                        Men's team wins Volleyball Championship for 2024-25 session
                       </p>
                       <div className="flex items-center gap-6 text-sm">
                         <div className="flex items-center gap-2">
@@ -97,11 +97,11 @@ export default function AchievementsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4" />
-                          <span>Zone-E Champions</span>
+                          <span>Champions</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Star className="w-4 h-4" />
-                          <span>HEC Championship</span>
+                          <span>NUML Championship</span>
                         </div>
                       </div>
                     </div>
@@ -109,13 +109,13 @@ export default function AchievementsPage() {
                 </div>
               </div>
 
-              {/* HEC Intervarsity Badminton Championship - Featured Large */}
+              {/* NUML Intervarsity Badminton Championship - Featured Large */}
               <div className="relative group cursor-pointer">
                 <div className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]">
                   <div className="aspect-[4/3] relative">
                     <img
-                      src="/achievement3.jpeg"
-                      alt="HEC Badminton Championship Team"
+                      src="/achievement2.jpeg"
+                      alt="NUML Badminton Championship Team"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
@@ -130,11 +130,11 @@ export default function AchievementsPage() {
                         <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                           <Trophy className="w-6 h-6" />
                         </div>
-                        <Badge className="bg-green-600 text-white border-0">Badminton</Badge>
+                        <Badge className="bg-green-600 text-white border-0">Football</Badge>
                       </div>
-                      <h3 className="text-3xl font-bold mb-3">HEC Zone-E Badminton Champions</h3>
+                      <h3 className="text-3xl font-bold mb-3">NUML Football Champions</h3>
                       <p className="text-lg text-gray-200 mb-4">
-                        Victory celebration! Team wins HEC Zone-E Intervarsity Badminton Championship 2025
+                        Victory celebration! Team wins NUML Football Championship 2025
                       </p>
                       <div className="flex items-center gap-6 text-sm">
                         <div className="flex items-center gap-2">
@@ -143,11 +143,11 @@ export default function AchievementsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4" />
-                          <span>Zone-E Champions</span>
+                          <span> Champions</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Star className="w-4 h-4" />
-                          <span>HEC Championship</span>
+                          <span>NUML Championship</span>
                         </div>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export default function AchievementsPage() {
 
           {/* National Level Achievement */}
           <section className="mb-16">
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-green-700 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24"></div>
               
@@ -171,16 +171,16 @@ export default function AchievementsPage() {
                     </div>
                     <div>
                       <Badge className="bg-yellow-500 text-white border-0 mb-2">National Level</Badge>
-                      <h3 className="text-3xl font-bold">All Pakistan Championship</h3>
+                    <h3 className="text-3xl font-bold">University Championship</h3>
                     </div>
                   </div>
-                  <h4 className="text-2xl font-bold mb-4">National Team Selection & Excellence</h4>
+                  <h4 className="text-2xl font-bold mb-4">Team Selection & Excellence</h4>
                   <p className="text-lg text-gray-200 mb-6">
-                    NUML students selected for national teams including Pakistan National Futsal Team and Pakistan Senior Hockey Team training camp, representing the university at the highest level of national sports.
+                    NUML students selected for teams including Hockey Team training camp, representing the university at the highest level of national sports.
                   </p>
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                      <div className="text-2xl font-bold text-yellow-300">National</div>
+                      <div className="text-2xl font-bold text-yellow-300">Campus</div>
                       <div className="text-sm text-gray-300">Level</div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
@@ -197,7 +197,7 @@ export default function AchievementsPage() {
                   <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                     <img
                       src="/achievement3.jpeg"
-                      alt="All Pakistan Volleyball Championship Team"
+                      alt="University Volleyball Championship Team"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -219,7 +219,7 @@ export default function AchievementsPage() {
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <div className="h-48 relative overflow-hidden">
                     <img
-                      src="/volleyball-champions.jpg"
+                      src="/volleyball-champions.jpeg"
                       alt="HEC Championship Winners"
                       className="w-full h-full object-cover"
                     />
@@ -228,12 +228,12 @@ export default function AchievementsPage() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-3">HEC Championship Winners</h3>
+                    <h3 className="text-2xl font-bold mb-3">NUML Championship</h3>
                     <p className="text-gray-600 mb-4">
-                      Exceptional performance in HEC Intervarsity Championships, securing top positions in Volleyball, Table Tennis, and Badminton events.
+                      Exceptional performance in Intervarsity Championships, securing top positions in Volleyball, Table Tennis, and Badminton events.
                     </p>
                     <div className="flex items-center justify-between">
-                      <Badge className="bg-yellow-100 text-yellow-800">Zone-E Champions</Badge>
+                      <Badge className="bg-yellow-100 text-yellow-800">Champions</Badge>
                       <span className="text-yellow-600 font-semibold">View All →</span>
                     </div>
                   </div>
@@ -244,7 +244,7 @@ export default function AchievementsPage() {
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
                   <div className="h-48 relative overflow-hidden">
                     <img
-                      src="/national-team-selection.jpg"
+                      src="/national-team-selection.jpeg"
                       alt="National Team Selections"
                       className="w-full h-full object-cover"
                     />
@@ -253,9 +253,9 @@ export default function AchievementsPage() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-3">National Team Selections</h3>
+                    <h3 className="text-2xl font-bold mb-3">Team Selections</h3>
                     <p className="text-gray-600 mb-4">
-                      NUML athletes selected for Pakistan National Futsal Team and Pakistan Senior Hockey Team training camps, representing at national level.
+                      NUML athletes selected for  Hockey Team training camps, representing NUML University at national level.
                     </p>
                     <div className="flex items-center justify-between">
                       <Badge className="bg-blue-100 text-blue-800">National Level</Badge>
@@ -280,7 +280,7 @@ export default function AchievementsPage() {
                   <div className="p-6">
                     <h3 className="text-2xl font-bold mb-3">Table Tennis Excellence</h3>
                     <p className="text-gray-600 mb-4">
-                      Women's team achieved 3rd position in All Pakistan Intervarsity Championship 2025, while men's singles champion won Zone-E title.
+                      Women's team achieved 3rd position in University Intervarsity Championship 2025, while men's singles champion won title.
                     </p>
                     <div className="flex items-center justify-between">
                       <Badge className="bg-green-100 text-green-800">2025 Champions</Badge>
@@ -341,7 +341,7 @@ export default function AchievementsPage() {
                     <h4 className="text-xl font-bold">National Participation</h4>
                     <Badge className="bg-blue-100 text-blue-800">National</Badge>
                   </div>
-                  <p className="text-gray-600">Represented NUML at All Pakistan Championship</p>
+                  <p className="text-gray-600">Represented NUML at University Championship</p>
                 </div>
                 <div className="text-right">
                   <div className="text-sm text-gray-500">2023-24</div>

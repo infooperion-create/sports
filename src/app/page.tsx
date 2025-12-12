@@ -86,7 +86,7 @@ export default function Home() {
                 alt={`NUML Sports ${index + 1}`}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-indigo-900/90"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-800/40 to-green-600/60 opacity-80"></div>
             </div>
           ))}
         </div>

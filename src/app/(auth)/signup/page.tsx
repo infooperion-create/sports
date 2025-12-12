@@ -88,7 +88,7 @@ export default function SignupPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url("/signup-banner.jpeg")'
+            backgroundImage: 'url("/signup-background.jpeg")'
           }}
         ></div>
         <div className="absolute inset-0 bg-blue-600 opacity-70"></div>

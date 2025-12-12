@@ -23,7 +23,7 @@ export default function SportsHealthPage() {
             className="w-full h-full object-cover"
           />
           {/* Colored Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/85 to-green-600/85"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-800/40 to-green-600/60 opacity-80"></div>
         </div>
         
         {/* Content */}
@@ -66,11 +66,20 @@ export default function SportsHealthPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Health Seminars */}
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Brain className="h-8 w-8 text-blue-600" />
+            <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-48 relative overflow-hidden">
+                <img
+                  src="/volleyball-champions.jpeg"
+                  alt="Health Seminars and Campaigns"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/40 via-blue-500/20 to-transparent flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Brain className="h-8 w-8 text-white" />
+                  </div>
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-xl text-center">Health Seminars & Campaigns</CardTitle>
               </CardHeader>
               <CardContent>
@@ -87,11 +96,20 @@ export default function SportsHealthPage() {
             </Card>
 
             {/* Medical Facilities */}
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Stethoscope className="h-8 w-8 text-green-600" />
+            <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-48 relative overflow-hidden">
+                <img
+                  src="/national-team-selection.jpeg"
+                  alt="Medical Facilities and Emergency Care"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-600/40 via-green-500/20 to-transparent flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Stethoscope className="h-8 w-8 text-white" />
+                  </div>
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-xl text-center">Medical Facilities</CardTitle>
               </CardHeader>
               <CardContent>
@@ -108,11 +126,20 @@ export default function SportsHealthPage() {
             </Card>
 
             {/* Sports Events */}
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Trophy className="h-8 w-8 text-yellow-600" />
+            <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-48 relative overflow-hidden">
+                <img
+                  src="hero-slider-3.jpeg"
+                  alt="Sports Events and Competitions"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-yellow-600/40 via-yellow-500/20 to-transparent flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Trophy className="h-8 w-8 text-white" />
+                  </div>
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-xl text-center">Sports Events</CardTitle>
               </CardHeader>
               <CardContent>
@@ -241,7 +268,7 @@ export default function SportsHealthPage() {
             <Card className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="h-40 relative overflow-hidden">
                 <img
-                  src="/sports-gala-event.jpg"
+                  src="/achievement1.jpeg"
                   alt="Sports Gala Events"
                   className="w-full h-full object-cover"
                 />
@@ -259,7 +286,7 @@ export default function SportsHealthPage() {
             <Card className="overflow-hidden hover:shadow-lg transition-shadow">
               <div className="h-40 relative overflow-hidden">
                 <img
-                  src="/sports-championship.jpg"
+                  src="/hero-slider-1.jpeg"
                   alt="Sports Championships"
                   className="w-full h-full object-cover"
                 />

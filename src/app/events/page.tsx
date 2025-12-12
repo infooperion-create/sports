@@ -18,12 +18,12 @@ export default function EventsPage() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/pakistani-cricket-boys.jpeg"
+            src="/pakistani-cricket-boys.jpg"
             alt="NUML Sports Events"
             className="w-full h-full object-cover"
           />
           {/* Colored Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/85 to-blue-800/85"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-800/40 to-green-600/60 opacity-80"></div>
         </div>
         
         {/* Content */}
@@ -59,8 +59,8 @@ export default function EventsPage() {
                 <div className="md:w-1/3">
                   <div className="h-64 md:h-full relative">
                     <img
-                      src="/achievement1.jpeg"
-                      alt="All Pakistan Volleyball Championship"
+                      src="/achievement3.jpeg"
+                      alt="University Volleyball Championship"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -73,7 +73,7 @@ export default function EventsPage() {
                     <Badge variant="outline">National Level</Badge>
                     <Badge variant="outline">Volleyball</Badge>
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">All Pakistan Inter University Volleyball Boys Championship 2023-24</h3>
+                  <h3 className="text-2xl font-bold mb-3">NUML University Volleyball Boys Championship 2023-24</h3>
                   <p className="text-gray-600 mb-4">
                     A prestigious national-level volleyball championship bringing together universities from across Pakistan. 
                     Our NUML team showcased exceptional talent and sportsmanship throughout the tournament.
@@ -106,7 +106,7 @@ export default function EventsPage() {
                 <div className="md:w-1/3">
                   <div className="h-64 md:h-full relative">
                     <img
-                      src="/achievement2.jpeg"
+                      src="/national-team-selection.jpeg"
                       alt="Inter Var Volleyball Champions Celebration"
                       className="w-full h-full object-cover"
                     />
@@ -122,7 +122,7 @@ export default function EventsPage() {
                     </Badge>
                     <Badge variant="outline">Volleyball</Badge>
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">Inter Var Volleyball Champions (Men) 2023-24</h3>
+                  <h3 className="text-2xl font-bold mb-3">Cricket Champions (Men) 2023-24</h3>
                   <p className="text-gray-600 mb-4">
                     Victory celebration event honoring our NUML volleyball team who emerged as champions. 
                     The event embodied the spirit of "Sports do not build character, they reveal it" - Hayes Brown.
@@ -397,29 +397,85 @@ export default function EventsPage() {
         </section>
       </div>
 
-      {/* Call to Action */}
-      <div className="bg-blue-600 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Join the Sports Action</h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Participate in exciting events and showcase your athletic talents at NUML.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/signup"
-              className="inline-flex items-center justify-center px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Join Sports Hub
-            </a>
-            <a
-              href="/achievements"
-              className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors"
-            >
-              View Achievements
-            </a>
+      {/* Join the Sports Action */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Join the Sports Action</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Participate in exciting events and showcase your athletic talents at NUML.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Join Sports Hub Card */}
+            <div className="relative group cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-green-600 rounded-2xl transform transition-all duration-300 group-hover:scale-105"></div>
+              <div className="relative bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-8 text-white transform transition-all duration-300 group-hover:scale-105">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">Join Sports Hub</h3>
+                    <p className="text-blue-100">Become part of our athletic community</p>
+                  </div>
+                </div>
+                <p className="text-blue-50 mb-6 leading-relaxed">
+                  Connect with fellow athletes, join teams, and participate in exclusive sports events. 
+                  Get access to training facilities, coaching, and competition opportunities.
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-2">
+                    <Badge className="bg-white/20 text-white border-white/30">Community</Badge>
+                    <Badge className="bg-white/20 text-white border-white/30">Teams</Badge>
+                  </div>
+                  <a
+                    href="/signup"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    Join Now
+                    <Calendar className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* View Achievements Card */}
+            <div className="relative group cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-teal-600 to-blue-600 rounded-2xl transform transition-all duration-300 group-hover:scale-105"></div>
+              <div className="relative bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-8 text-white transform transition-all duration-300 group-hover:scale-105">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                    <Trophy className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">View Achievements</h3>
+                    <p className="text-green-100">Celebrate our championship victories</p>
+                  </div>
+                </div>
+                <p className="text-green-50 mb-6 leading-relaxed">
+                  Explore the hall of excellence and discover the remarkable achievements of NUML athletes. 
+                  From championship victories to national team selections, witness our legacy of success.
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-2">
+                    <Badge className="bg-white/20 text-white border-white/30">Champions</Badge>
+                    <Badge className="bg-white/20 text-white border-white/30">Excellence</Badge>
+                  </div>
+                  <a
+                    href="/achievements"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    Explore
+                    <Star className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
       </main>
       
       <Footer />

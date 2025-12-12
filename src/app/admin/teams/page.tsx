@@ -497,10 +497,17 @@ export default function AdminTeams() {
                               {team._count.members} member{team._count.members !== 1 ? 's' : ''}
                             </span>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Crown className="h-4 w-4 text-yellow-500" />
-                            <span className="text-sm text-gray-600">Team Captain</span>
+                          {team.captain && (
+                          <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                              <Crown className="h-4 w-4 text-yellow-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600">Captain</p>
+                              <p className="text-sm font-medium">{team.captain.name}</p>
+                            </div>
                           </div>
+                        )}
                         </div>
 
                         {team.coach && (
@@ -598,34 +605,74 @@ export default function AdminTeams() {
 
                 {selectedTeam.members.length > 0 ? (
                   <div className="grid gap-3">
-                    {selectedTeam.members.map((member) => (
-                      <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
-                        <div className="flex items-center gap-3">
-                          <Avatar>
-                            <AvatarFallback>
-                              {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium">{member.name}</p>
-                            <p className="text-sm text-gray-600">{member.email}</p>
+                    {selectedTeam.members.map((member) => {
+                      const isCaptain = selectedTeam.captainId === member.id
+                      const isCoach = selectedTeam.coach?.id === member.id
+                      
+                      return (
+                        <div key={member.id} className={`flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 ${
+                          isCaptain ? 'bg-yellow-50 border-yellow-200' : 
+                          isCoach ? 'bg-green-50 border-green-200' : 
+                          'bg-white border-gray-200'
+                        }`}>
+                          <div className="flex items-center gap-3">
+                            <Avatar>
+                              <AvatarFallback className={
+                                isCaptain ? 'bg-yellow-600 text-white' :
+                                isCoach ? 'bg-green-600 text-white' :
+                                'bg-blue-600 text-white'
+                              }>
+                                {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium">{member.name}</p>
+                              <p className="text-sm text-gray-600">{member.email}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                {isCaptain && (
+                                  <Badge className="bg-yellow-600 text-white">
+                                    <Crown className="h-3 w-3 mr-1" />
+                                    Captain
+                                  </Badge>
+                                )}
+                                {isCoach && (
+                                  <Badge className="bg-green-600 text-white">
+                                    <Users className="h-3 w-3 mr-1" />
+                                    Coach
+                                  </Badge>
+                                )}
+                                {!isCaptain && !isCoach && (
+                                  <Badge variant="secondary">
+                                    <Users className="h-3 w-3 mr-1" />
+                                    Member
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-blue-600">ID: {member.studentID}</p>
+                              <p className="text-xs text-gray-500">{member.department}</p>
+                              <p className="text-xs text-gray-500">
+                                {member.role === 'STUDENT' ? 'Student' : 
+                                 member.role === 'COACH' ? 'Coach' : 
+                                 member.role === 'CAPTAIN' ? 'Captain' : member.role}
+                              </p>
+                            </div>
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={() => handleRemoveMember(member.id, member.role || 'MEMBER')}
+                              disabled={isCaptain}
+                              title={isCaptain ? "Cannot remove captain from team" : "Remove member from team"}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <div className="text-right">
-                            <p className="text-sm font-medium text-blue-600">ID: {member.studentID}</p>
-                            <p className="text-xs text-gray-500">{member.department}</p>
-                          </div>
-                          <Button 
-                            variant="destructive" 
-                            size="sm"
-                            onClick={() => handleRemoveMember(member.id, 'MEMBER')}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 ) : (
                   <div className="text-center py-8">
