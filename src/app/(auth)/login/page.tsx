@@ -67,7 +67,7 @@ export default function LoginPage() {
             backgroundImage: 'url("/login-background.jpeg")'
           }}
         ></div>
-        <div className="absolute inset-0 bg-blue-600 opacity-70"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-blue-800/40 to-green-600/60 opacity-80"></div>
         <div className="relative z-10 flex flex-col justify-center items-center text-white p-12">
           <div className="text-center">
             <h1 className="text-5xl font-bold mb-4">NUML Sports Hub</h1>
